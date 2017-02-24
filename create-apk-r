@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Must be called from the app's root folder!
+
+# For automated signing:
+# 	Create a file called release-signing.properties and put in APPFOLDER/platforms/android folder
+# 	Contents of the file: edit after = for all except storeType
+	# 	storeFile=C:/yourlocation/app.keystore (e.g. /Users/.signing/)
+	# 	storeType=jks
+	# 	keyAlias=aliasname
+	# 	keyPassword=aliaspass
+	# 	storePassword=password
+
+# Make shure that everything is up to date (pull beforehand, if necessary)
+gulp && gulp remove-proxy;
+
+#Build release apk, automatically using the signing data from
+ionic build android --release;
+
+# Gather data for automatic file naming.
+name=${PWD##*/};
+apkFile=./platforms/android/build/outputs/apk/android-release.apk;
+versionCode=`aapt dump badging $apkFile | grep versionCode | awk '{print $3}' | sed s/versionCode=//g | sed s/\'//g`;
+versionName=`aapt dump badging $apkFile | grep versionName | awk '{print $4}' | sed s/versionName=//g | sed s/\'//g`;
+version=$versionName"_"$versionCode;
+
+# If no automatic naming is wanted, you can pass version/name & version manually
+if [ "$#" -eq 2 ]; then
+	name=$1;
+	version=$2;
+elif [ "$#" -eq 1 ]; then
+    name=${PWD##*/};
+    version=$1
+fi
+
+[[ -d ./apk-release ]] || mkdir ./apk-release # Create folder, if necessary
+cp $apkFile ./apk-release/$name-release-$version.apk && xdg-open ./apk-release; #copy and rename new release-apk.
+aapt dump badging $apkFile | grep versionCode; #Log versionCode

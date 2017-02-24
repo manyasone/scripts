@@ -1,0 +1,20 @@
+#!/bin/bash
+
+mergedLocals=$(git branch --merged | egrep -v "(^\*|master|dev|alpha|beta)");
+mergedRemotes=$(git branch -r --merged | egrep -v "(^\*|master|dev|alpha|beta)");
+
+if [ -n "$mergedLocals" ]
+then
+	git branch --merged | egrep -v "(^\*|master|dev|alpha|beta)" | xargs git branch -d;
+else
+	echo "Local branches already all cleaned up!";
+fi
+
+if [ -n "$mergedRemotes" ]
+then
+	git branch -r --merged | egrep -v "(^\*|master|dev|alpha|beta)" | sed 's/origin\///' | xargs -n 1 git push --delete origin;
+else
+	echo "Remote branches already all cleaned up!"
+fi
+
+git fetch -p;

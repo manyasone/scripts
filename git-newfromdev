@@ -1,0 +1,5 @@
+#!/bin/bash
+
+((!$#)) && echo No branch name, command ignored! && exit 1
+
+git checkout dev && git fetch && git pull && git checkout -b ticket/$1

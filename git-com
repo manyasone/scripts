@@ -1,0 +1,16 @@
+#!/bin/bash
+
+branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
+ticketNumber=${branch:7};
+
+if [ -z "$ticketNumber" ]; then
+    echo "No ticket number present, aborting!";
+else
+    if [ "$#" -eq 2 ]; then
+        git commit -m "[$1 #$ticketNumber] $2";
+    elif [ "$#" -eq 1 ]; then 
+        git commit -m "[refs #$ticketNumber] $1";
+    else
+        echo "Illegal number of parameters";
+    fi
+fi

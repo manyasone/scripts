@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ "$#" -eq 3 ]; then
+    git commit -m "[$1 #$2] $3";
+elif [ "$#" -eq 2 ]; then 
+    git commit -m "[refs #$1] $2";
+else
+    echo "Illegal number of parameters";
+fi

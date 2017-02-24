@@ -1,0 +1,15 @@
+#!/bin/bash
+name=${PWD##*/};
+unsigned_apk=./platforms/android/build/outputs/apk/android-release-unsigned.apk;
+versionCode=`aapt dump badging $unsigned_apk | grep versionCode | awk '{print $3}' | sed s/versionCode=//g | sed s/\'//g`;
+versionName=`aapt dump badging $unsigned_apk | grep versionName | awk '{print $4}' | sed s/versionName=//g | sed s/\'//g`;
+version=$versionName"_"$versionCode;
+
+if [ "$#" -eq 2 ]; then
+	name=$1;
+	version=$2;
+elif [ "$#" -eq 1 ]; then
+	version=$1;
+fi
+
+adb install -r ~/Dokumente/$name/apk/$name-release-$version.apk;
