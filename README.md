@@ -4,7 +4,7 @@
 
 1. Clone this repository in a local folder, e.g. ~/bin
 2. Add ~/bin to your PATH
-3. Make all files in current dir executable: chmod +x *
+3. Make all files in current dir executable: ```chmod +x *```
 
 ## List of scripts
 Params in '[]' are optional.
