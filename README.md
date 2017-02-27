@@ -7,7 +7,7 @@
 3. Make all files in current dir executable: chmod +x *
 
 ## List of scripts
-Params in '[]' are optional:
+Params in '[]' are optional.
 
 ### Ionic:
 Note: Execute these scripts in the project's root folder.
