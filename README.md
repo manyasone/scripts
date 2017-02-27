@@ -3,7 +3,8 @@
 #### How to run
 
 Assuming that you want to place the scripts in a folder named _~/bin_:
-1. Clone this repository in a local folder, e.g. ```git clone git@github.com:manyasone/scripts.git ~/bin```.
+
+1. Clone this repository: ```git clone git@github.com:manyasone/scripts.git ~/bin```.
 2. Add _~/bin_ to your PATH.
 3. Make all files in _~/bin_ executable: ```chmod +x ~/bin/*```.
 
