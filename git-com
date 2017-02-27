@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# This scripts helps to commit staged changes.
+# This script helps to commit staged changes.
 
 branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
+commitType="refs"
+message=""
 
 # Get ticketNumber by removing 'ticket/' from the branch's name.
 # Probably could be improved, to get everything after the last slash.
@@ -11,12 +13,15 @@ ticketNumber=${branch:7};
 # If three params are passed:
 if [ "$#" -eq 3 ]; then
     # $1: ticketNo, $2: EH|RF|BF|BF, $3: Commit message
-    git commit -m "[$1 #$2] $3";
+    ticketNumber=$1
+    commitType=$2
+    message=$3
 
 # If two params are passed
 elif [ "$#" -eq 2 ]; then
     # $1: ticketNo, $2: Commit message
-    git commit -m "[refs #$1] $2";
+    ticketNumber=$1
+    message=$2
 
 # If one param is passed
 elif [ "$#" -eq 1 ]; then
@@ -25,9 +30,16 @@ elif [ "$#" -eq 1 ]; then
     if [ -z "$ticketNumber" ]; then
         echo "No ticket number present, aborting!";
     else
-        git commit -m "[refs #$ticketNumber] $1";
+        $message=$1
     fi
-
 else
     echo "Illegal number of parameters";
+fi
+
+if [ -z "$ticketNumber" ]; then
+        echo "No ticket number present, aborting!";
+elif [ -z "$message" ]; then
+        echo "No commit message present, aborting!";
+else
+    git commit -m "[$commitType #$ticketNumber] $message";
 fi

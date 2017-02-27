@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Check out ticket with given #number
+# Check out ticket with passed #number
 
 ((!$#)) && echo No branch name, command ignored! && exit 1
 
