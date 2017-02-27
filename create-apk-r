@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ "$#" -eq 2 ]; then
+    gulp && ionic build android --release &&
+    jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore /Users/.signing/$1-release-key.keystore ./platforms/android/build/outputs/apk/android-release-unsigned.apk $1 &&
+    zipalign -vf 4 ./platforms/android/build/outputs/apk/android-release-unsigned.apk ~/Documents/$1/apk/$1-release-$2.apk && open ~/Documents/$1/apk;
+
+    # for var in "$@"
+    # do
+    #     if  [ $var == "-install" ]; then
+    #         adb install ~/Documents/$1/apk/$1-release-$2.apk;
+    #     fi
+    # done
+
+elif [ "$#" -eq 1 ]; then
+    name=${PWD##*/}; 
+    gulp && ionic build android --release &&
+    jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore /Users/.signing/$name-release-key.keystore ./platforms/android/build/outputs/apk/android-release-unsigned.apk $name &&
+    zipalign -vf 4 ./platforms/android/build/outputs/apk/android-release-unsigned.apk ~/Documents/$name/apk/$name-release-$1.apk && open ~/Documents/$name/apk;
+
+    # for var in "$@"
+    # do
+    #     if  [ $var == "-install" ]; then
+    #         adb install ~/Documents/$name/apk/$name-release-$1.apk;
+    #     fi
+    # done
+
+else
+    echo "Please provide the following params: appname (== keystore alias), version name (e.g. 1.0.0).";
+fi
+

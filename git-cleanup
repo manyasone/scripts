@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Deletes all merged local and remote branches.
+# Excluded branches will be ignored (also applies to branch names containing an excluded pattern).
+
+# The current local branch will be ignored, too.
+# Its remote sibling will be deleted, if it does not fit the excluded pattern.
+
+
+# Set excluded branches
+excludedBranches="(^\*|master|slave|dev|alpha|beta)"
+
+# Get local and remote branches, that do not fit the patterns
+mergedLocals=$(git branch --merged | egrep -v $excludedBranches);
+mergedRemotes=$(git branch -r --merged | egrep -v $excludedBranches);
+
+# Clean up local branches
+if [ -n "$mergedLocals" ]
+then
+	git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d;
+else
+	echo "Local branches already all cleaned up!";
+fi
+
+# Clean up remote branches
+if [ -n "$mergedRemotes" ]
+then
+	git branch -r --merged | egrep -v $excludedBranches | sed 's/origin\///' | xargs -n 1 git push --delete origin;
+else
+	echo "Remote branches already all cleaned up!"
+fi
+
+# Fetch and prune all unreachable objects from the object database
+git fetch -p;

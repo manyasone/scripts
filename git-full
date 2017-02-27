@@ -1,0 +1,7 @@
+#!bin/bash
+
+git fetch && git pull;
+
+# if [ "$1" -eq 'install' ]; then
+#     npm install && composer install;
+# fi

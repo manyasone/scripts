@@ -1,0 +1,6 @@
+
+gulp;
+gulp remove-proxy;
+ionic run android --device;
+ionic run ios --device;
+gulp add-proxy;

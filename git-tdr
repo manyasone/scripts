@@ -1,0 +1,10 @@
+#!/bin/bash
+
+branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
+ticketNumber=${branch:7};
+
+if [ -z "$ticketNumber" ]; then
+    echo "No ticket number present, aborting!";
+else
+    git checkout dev && git fetch && git pull && git merge $branch && git push && git remove $ticketNumber;
+fi

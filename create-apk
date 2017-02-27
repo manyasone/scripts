@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ "$#" -eq 2 ]; then
+    name=$1;
+    gulp && ionic build android && cp ./platforms/android/build/outputs/apk/android-debug.apk ~/Documents/$1/apk/$1-debug-$2.apk && open ~/Documents/name/apk;
+elif [ "$#" -eq 1 ]; then
+    name=${PWD##*/}; 
+    gulp && ionic build android && cp ./platforms/android/build/outputs/apk/android-debug.apk ~/Documents/$name/apk/$name-debug-$1.apk && open ~/Documents/$name/apk;
+else
+    echo "Please provide the following params: [appname (== keystore alias),] version name (e.g. 1.0.0).";
+fi
