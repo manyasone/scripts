@@ -1,3 +1,5 @@
 #!/bin/bash
 
+# Force push dev branch to origin/master
+
 git push -f origin dev:master;

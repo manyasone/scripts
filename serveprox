@@ -1,3 +1,6 @@
 #!/bin/bash
 
+# Start ionic server and activate proxy
+# (proxy is used in camigolo; add-proxy and remove-proxy can be found in the project's gulpfile)
+
 ionic serve && gulp add-proxy;

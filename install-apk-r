@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Try to install the latest signed release apk
+
 name=${PWD##*/};
 unsigned_apk=./platforms/android/build/outputs/apk/android-release-unsigned.apk;
 versionCode=`aapt dump badging $unsigned_apk | grep versionCode | awk '{print $3}' | sed s/versionCode=//g | sed s/\'//g`;
@@ -12,4 +15,4 @@ elif [ "$#" -eq 1 ]; then
 	version=$1;
 fi
 
-adb install -r ~/Dokumente/$name/apk/$name-release-$version.apk;
+adb install -r ./apk-release/$name-release-$version.apk;

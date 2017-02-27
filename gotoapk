@@ -1,3 +1,0 @@
-#!/bin/bash
-# echo ~/Dokumente/$1/apk
-xdg-open ~/Dokumente/$1/apk

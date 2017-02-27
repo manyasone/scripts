@@ -12,6 +12,7 @@
 	# 	storePassword=password
 
 # Make shure that everything is up to date (pull beforehand, if necessary)
+# (proxy is used in camigolo; add-proxy and remove-proxy can be found in the project's gulpfile)
 gulp && gulp remove-proxy;
 
 #Build release apk, automatically using the signing data from

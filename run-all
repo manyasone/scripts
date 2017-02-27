@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #run ionic app on android and ios device.
+# (proxy is used in camigolo; add-proxy and remove-proxy can be found in the project's gulpfile)
 
 gulp;
 gulp remove-proxy;

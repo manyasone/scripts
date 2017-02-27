@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Builds an unsigned apk and tries to copy it into ./apk/debug
+# (proxy is used in camigolo; add-proxy and remove-proxy can be found in the project's gulpfile)
 
-gulp && ionic build android;
+gulp && gulp remove-proxy; ionic build android;
 
 name=${PWD##*/};
 apkFile=./platforms/android/build/outputs/apk/android-release.apk;

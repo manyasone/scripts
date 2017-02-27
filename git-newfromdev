@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Checkout dev branch, fetch & pull, create new ticket with the given #number
+# Checkout dev branch, fetch & pull, create new branch in ticket/#1
 
 ((!$#)) && echo No branch name, command ignored! && exit 1
 

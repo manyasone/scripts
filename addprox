@@ -1,3 +1,5 @@
 #!/bin/bash
 
+# Runs gulp add-proxy (used in camigolo; can be found in gulpfile.js)
+
 gulp add-proxy

@@ -1,9 +1,0 @@
-#!/bin/bash
-name=${PWD##*/};
-if [ "$#" -eq 2 ]; then
-    adb install -r ~/Documents/$1/apk/$1-release-$2.apk
-elif [ "$#" -eq 1 ]; then
-    adb install -r ~/Documents/$name/apk/$name-release-$1.apk
-else
-    echo "Please provide the following params: appname (needed if you're not in the app folder), version name (e.g. 1.0.0).";
-fi

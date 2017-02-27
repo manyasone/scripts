@@ -1,7 +1,5 @@
 #!bin/bash
 
-git fetch && git pull;
+# fetch and pull == full
 
-# if [ "$1" -eq 'install' ]; then
-#     npm install && composer install;
-# fi
+git fetch && git pull;
