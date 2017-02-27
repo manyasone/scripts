@@ -2,9 +2,10 @@
 
 #### How to run
 
+Assuming that you want to place the scripts in a folder named _~/bin_:
 1. Clone this repository in a local folder, e.g. ```git clone git@github.com:manyasone/scripts.git ~/bin```.
-2. Add the repository (e.g. _~/bin_) to your PATH.
-3. Make all files in current dir executable: ```chmod +x *```.
+2. Add _~/bin_ to your PATH.
+3. Make all files in _~/bin_ executable: ```chmod +x ~/bin/*```.
 
 ## List of scripts
 Params in '[]' are optional.
