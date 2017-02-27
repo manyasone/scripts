@@ -31,14 +31,12 @@
 - ```git devtomaster``` -> Force push dev branch to origin/master
 - ```git full``` -> Fetch and pull == full
 - ```git new``` -> Fetch & pull on current branch, checkout new branch in ticket folder.
-    - Params:
-        - ticketNumber
+    - Param: ticketNumber
 - ```git newfromdev``` -> Checkout dev branch, perform 'git new'
 - ```git pushnew``` -> Push current $branch to origin/$branch, if it's new
 - ```git remove``` -> Remove branch locally and on origin.
 - ```git todev``` -> Merge branch to dev branch and delete it afterwards.
-    - Params:
-        - [ticketNumber]
+    - Param: [ticketNumber]
 
 ### Other:
 - ```gw``` -> gulp && gulp watch
