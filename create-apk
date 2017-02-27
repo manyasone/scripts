@@ -1,11 +1,23 @@
 #!/bin/bash
 
+# Builds an unsigned apk and tries to copy it into ./apk/debug
+
+gulp && ionic build android;
+
+name=${PWD##*/};
+apkFile=./platforms/android/build/outputs/apk/android-release.apk;
+versionCode=`aapt dump badging $apkFile | grep versionCode | awk '{print $3}' | sed s/versionCode=//g | sed s/\'//g`;
+versionName=`aapt dump badging $apkFile | grep versionName | awk '{print $4}' | sed s/versionName=//g | sed s/\'//g`;
+version=$versionName"_"$versionCode;
+
 if [ "$#" -eq 2 ]; then
     name=$1;
-    gulp && ionic build android && cp ./platforms/android/build/outputs/apk/android-debug.apk ~/Documents/$1/apk/$1-debug-$2.apk && open ~/Documents/name/apk;
+    version=$2;
 elif [ "$#" -eq 1 ]; then
-    name=${PWD##*/}; 
-    gulp && ionic build android && cp ./platforms/android/build/outputs/apk/android-debug.apk ~/Documents/$name/apk/$name-debug-$1.apk && open ~/Documents/$name/apk;
-else
-    echo "Please provide the following params: [appname (== keystore alias),] version name (e.g. 1.0.0).";
+    name=${PWD##*/};
+    version=$1;
 fi
+
+[[ -d ./apk-debug ]] || mkdir ./apk-debug # Create folder, if necessary
+cp $apk-file ./apk-debug/$name-debug-$version.apk && cd ./apk-debug;
+aapt dump badging $apkFile | grep versionCode; #Log versionCode

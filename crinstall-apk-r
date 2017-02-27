@@ -1,14 +1,5 @@
 #!/bin/bash
+# Must be called from the app's root folder!
+# Creates a android release apk and automatically deploys it. Replaces old apk if necessary and possible.
 
-gulp remove-proxy;
-
-name=${PWD##*/};
-if [ "$#" -eq 2 ]; then
-    create-apk-r $1 $2 &&
-    adb install -r ~/Documents/$1/apk/$1-release-$2.apk
-elif [ "$#" -eq 1 ]; then
-    create-apk-r $1 &&
-    adb install -r ~/Documents/$name/apk/$name-release-$1.apk
-else
-    echo "Please provide the following params: appname (needed if you're not in the app folder), version name (e.g. 1.0.0).";
-fi
+create-apk-r && adb install -r ./platforms/android/build/outputs/apk/android-release.apk;

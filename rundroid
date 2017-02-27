@@ -1,0 +1,3 @@
+#!/bin/bash
+
+gulp && gulp remove-proxy && ionic run android;

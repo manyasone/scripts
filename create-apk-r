@@ -1,31 +1,38 @@
 #!/bin/bash
 
+# Must be called from the app's root folder!
+
+# For automated signing:
+# 	Create a file called release-signing.properties and put in APPFOLDER/platforms/android folder
+# 	Contents of the file: edit after = for all except storeType
+	# 	storeFile=C:/yourlocation/app.keystore (e.g. /Users/.signing/)
+	# 	storeType=jks
+	# 	keyAlias=aliasname
+	# 	keyPassword=aliaspass
+	# 	storePassword=password
+
+# Make shure that everything is up to date (pull beforehand, if necessary)
+gulp && gulp remove-proxy;
+
+#Build release apk, automatically using the signing data from
+ionic build android --release;
+
+# Gather data for automatic file naming.
+name=${PWD##*/};
+apkFile=./platforms/android/build/outputs/apk/android-release.apk;
+versionCode=`aapt dump badging $apkFile | grep versionCode | awk '{print $3}' | sed s/versionCode=//g | sed s/\'//g`;
+versionName=`aapt dump badging $apkFile | grep versionName | awk '{print $4}' | sed s/versionName=//g | sed s/\'//g`;
+version=$versionName"_"$versionCode;
+
+# If no automatic naming is wanted, you can pass version/name & version manually
 if [ "$#" -eq 2 ]; then
-    gulp && ionic build android --release &&
-    jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore /Users/.signing/$1-release-key.keystore ./platforms/android/build/outputs/apk/android-release-unsigned.apk $1 &&
-    zipalign -vf 4 ./platforms/android/build/outputs/apk/android-release-unsigned.apk ~/Documents/$1/apk/$1-release-$2.apk && open ~/Documents/$1/apk;
-
-    # for var in "$@"
-    # do
-    #     if  [ $var == "-install" ]; then
-    #         adb install ~/Documents/$1/apk/$1-release-$2.apk;
-    #     fi
-    # done
-
+	name=$1;
+	version=$2;
 elif [ "$#" -eq 1 ]; then
-    name=${PWD##*/}; 
-    gulp && ionic build android --release &&
-    jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore /Users/.signing/$name-release-key.keystore ./platforms/android/build/outputs/apk/android-release-unsigned.apk $name &&
-    zipalign -vf 4 ./platforms/android/build/outputs/apk/android-release-unsigned.apk ~/Documents/$name/apk/$name-release-$1.apk && open ~/Documents/$name/apk;
-
-    # for var in "$@"
-    # do
-    #     if  [ $var == "-install" ]; then
-    #         adb install ~/Documents/$name/apk/$name-release-$1.apk;
-    #     fi
-    # done
-
-else
-    echo "Please provide the following params: appname (== keystore alias), version name (e.g. 1.0.0).";
+    name=${PWD##*/};
+    version=$1
 fi
 
+[[ -d ./apk-release ]] || mkdir ./apk-release # Create folder, if necessary
+cp $apkFile ./apk-release/$name-release-$version.apk && cd ./apk-release; #copy and rename new release-apk.
+aapt dump badging $apkFile | grep versionCode; #Log versionCode

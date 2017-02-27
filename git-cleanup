@@ -6,7 +6,6 @@
 # The current local branch will be ignored, too.
 # Its remote sibling will be deleted, if it does not fit the excluded pattern.
 
-
 # Set excluded branches
 excludedBranches="(^\*|master|slave|dev|alpha|beta)"
 
@@ -26,6 +25,7 @@ fi
 if [ -n "$mergedRemotes" ]
 then
 	git branch -r --merged | egrep -v $excludedBranches | sed 's/origin\///' | xargs -n 1 git push --delete origin;
+
 else
 	echo "Remote branches already all cleaned up!"
 fi
