@@ -21,9 +21,9 @@ Note: Execute these scripts in the project's root folder.
 - ```serveprox ->``` Start ionic server and activate proxy. (a proxy is used in camigolo; can be found in gulpfile.js)
 
 ### Git:
-Note: Most of these scripts assume that ticket branches are located in 'ticket/$ticketNumber'
+Note: Most of these scripts assume that ticket branches are located in _ticket/$ticketNumber_
 
-- ```git checkout#``` -> Check out new branch in ticket/$ticketNumber. Params:
+- ```git checkout#``` -> Check out new branch in _ticket/$ticketNumber_. Params:
     - ticketNumber
 - ```git cleanup``` -> Deletes all merged local and remote branches (the current branch and branches containing 'dev', 'master', 'alpha' and 'beta' in their name will be ignored).
 - ```git com``` -> Commit staged changes.
