@@ -10,7 +10,7 @@
 Params in '[]' are optional.
 
 ### Ionic:
-Note: Execute these scripts in the project's root folder..
+Note: Execute these scripts in the project's root folder.
 - ```create-apk``` -> Create unsigned android apk in _./apk-debug_.
 - ```create-apk`-r``` -> Create signed android apk in _./apk-release_.
 - ```crinstall-apk`-r``` -> Run ```create-apk-r``` and install the created apk on the connected device.
