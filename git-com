@@ -30,7 +30,7 @@ elif [ "$#" -eq 1 ]; then
     if [ -z "$ticketNumber" ]; then
         echo "No ticket number present, aborting!";
     else
-        $message=$1
+        message=$1
     fi
 else
     echo "Illegal number of parameters";
