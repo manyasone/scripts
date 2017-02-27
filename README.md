@@ -2,9 +2,9 @@
 
 #### How to run
 
-1. Clone this repository in a local folder, e.g. ~/bin
-2. Add ~/bin to your PATH
-3. Make all files in current dir executable: ```chmod +x *```
+1. Clone this repository in a local folder, e.g. ```git clone git@github.com:manyasone/scripts.git ~/bin```.
+2. Add the repository (e.g. _~/bin_) to your PATH.
+3. Make all files in current dir executable: ```chmod +x *```.
 
 ## List of scripts
 Params in '[]' are optional.
