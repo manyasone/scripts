@@ -47,3 +47,8 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
 - ```gw``` -> gulp && gulp watch
 - ```addprox``` -> Runs ```gulp add-proxy``` (a proxy is used in camigolo; can be found in the project's gulpfile.js)
 
+### Other:
+- ```scripts-update```-> Pull from origin and make files executable.
+
+
+
