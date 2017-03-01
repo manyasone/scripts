@@ -13,10 +13,11 @@ Params in '[]' are optional.
 
 ### Ionic:
 Note: Execute these scripts in the project's root folder.
-- ```create-apk``` -> Create unsigned android apk in _./apk-debug_.
-- ```create-apk-r``` -> Create signed android apk in _./apk-release_.
-- ```crinstall-apk-r``` -> Run ```create-apk-r``` and install the created apk on the connected device.
-- ```install-apk-r``` -> Try to install the latest release apk on the connected device.
+- ```create-apk``` -> Create android apk
+    - Params:
+        - -r -> Create release apk
+        - -i -> Install apk
+        - -ri -> Do both
 - ```run-all``` -> Run ionic app on android and ios device.
 - ```run-android``` -> Run ionic app on android device.
 - ```run-ios``` -> Run ionic app on ios device.

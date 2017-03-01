@@ -1,5 +1,0 @@
-#!/bin/bash
-# Must be called from the app's root folder!
-# Creates a android release apk and automatically deploys it. Replaces old apk if necessary and possible.
-
-create-apk-r && adb install -r ./platforms/android/build/outputs/apk/android-release.apk;
