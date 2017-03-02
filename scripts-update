@@ -1,4 +1,3 @@
 #!/bin/bash
 echo Updating scripts...
-lastDir=pwd|pbcopy;
-cd ~/bin && git fetch && git pull && chmod +x ~/bin/* && cd $lastDir && echo "done!";
+cd ~/bin && git fetch && git pull && chmod +x ~/bin/* && echo "done!";
