@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Merge and push dev to beta
+
+git checkout dev && git fetch && git pull && git checkout beta && git merge dev && git push && git checkout dev;

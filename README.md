@@ -14,10 +14,10 @@ Params in '[]' are optional.
 ### Ionic:
 Note: Execute these scripts in the project's root folder.
 - ```create-apk``` -> Create android apk
-    - Params:
-        - -r -> Create release apk
-        - -i -> Install apk
-        - -ri -> Do both
+    - Params (can be combined at will):
+        - r -> Create release apk
+        - i -> Install apk
+        - o-> Open apk folder after creation
 - ```run-all``` -> Run ionic app on android and ios device.
 - ```run-android``` -> Run ionic app on android device.
 - ```run-ios``` -> Run ionic app on ios device.
@@ -35,6 +35,7 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
         - [EH|RF|BF|BF]
         - message
 - ```git devtomaster``` -> Force push dev branch to origin/master.
+- ```git devtobeta``` -> Merge and push dev to beta.
 - ```git full``` -> Fetch and pull == full.
 - ```git new``` -> Fetch & pull on current branch, checkout new branch in ticket folder.
     - Mandatory param: ticketNumber.
