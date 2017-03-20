@@ -11,20 +11,35 @@
 	# 	keyPassword=aliaspass
 	# 	storePassword=password
 
+# Params
+#	r: create release apk
+#	i: install
+#	o: open apk folder after creation
+
+openInFolder=false;
 deploy=false;
 signingConfig=debug;
+
 for var in "$@"
 do
-    if [ $var = "-i" ]; then
+    if [[ $var == *"i"* ]]; then
         deploy=true;
-    elif [ $var = "-r" ]; then
-        signingConfig=release;
-    elif [ $var = "-ri" ]; then
-        deploy=true;
-        signingConfig=release;
+    echo Will deploy the created apk after.
+    else echo Won\'t deploy the created apk after.
     fi
+
+    if [[ $var == *"r"* ]]; then
+        signingConfig=release;
+        echo Will build $signingConfig apk;
+    fi
+
+    if [[ $var == *"o"* ]]; then
+        openInFolder=true;
+        echo Will show apk folder after creation.
+    else echo Won\'t show apk folder after creation.
+    fi
+
 done
-echo Will build $signingConfig apk --- deploy=$deploy;
 
 
 # Make sure that everything is up to date (pull beforehand, if necessary)
@@ -52,5 +67,7 @@ if [ "$deploy" = true ]; then
     adb install -r $filePath;
 fi
 
-open ./apk-$signingConfig; #OS X
-xdg-open ./apk-$signingConfig; #Linux
+if [ "$openInFolder" = true ]; then
+	open ./apk-$signingConfig; #OS X
+	xdg-open ./apk-$signingConfig; #Linux
+fi
