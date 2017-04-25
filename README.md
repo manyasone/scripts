@@ -35,8 +35,8 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
         - [ticketNumber]
         - [EH|RF|BF|BF]
         - message
-- ```git devtomaster``` -> Force push dev branch to origin/master.
-- ```git devtobeta``` -> Merge and push dev to beta.
+- ```git devtomaster``` -> Force push dev branch to origin/master. (BE CAREFUL WITH THIS ONE)
+- ```git devtobeta``` -> Merge and push dev to beta. (BE CAREFUL WITH THIS ONE)
 - ```git full``` -> Fetch and pull == full.
 - ```git new``` -> Fetch & pull on current branch, checkout new branch in ticket folder.
     - Mandatory param: ticketNumber.
