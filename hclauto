@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# set aliases to harvest projects
+# use folder name
+hcl alias kris3 13397265 7526703
+
+path=${PWD##*/} # get folder name
+branch=$(git symbolic-ref --short -q HEAD)
+hclIsInstalled=$(which hcl)
+gitIsInstalled=$(which git)
+
+# check for git & hcl
+if [ -z "$hclIsInstalled" ] || [ -z "$gitIsInstalled" ]
+then
+    echo please install git and hcl first
+    exit
+fi
+
+if [ -n "$path" ] && [ -n "$branch" ]
+then
+  hcl stop # stop timer
+  hcl @"$path" "$branch" # start timer
+  # echo starting timer at "$path"/"$branch"
+else
+  echo not on any branch
+fi
