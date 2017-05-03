@@ -1,0 +1,136 @@
+#!/bin/bash
+
+# Build a new fidion apk
+# Params:
+# 	- App flavor (see list of case-statements below).
+#	- These must be prefixed with a '-' and can be combined
+#	  (e.g. -bri to build a release apk and deploy it to the device).
+#		b -> Build new apk
+#		r -> Use release apk
+#		i -> Deploy apk to device
+#		u -> Uplad apk to crashlytics
+
+flavor="invalid"
+build=false
+variant="debug"
+deploy=false
+upload=false
+
+for var in "$@"
+do
+	if [[ ${var:0:1} == "-" ]]; then
+		if [[ $var == *"b"* ]]; then
+			build=true;
+    		echo Will build new apk;
+		fi
+		if [[ $var == *"r"* ]]; then
+			variant="release";
+    		echo Will use release apk;
+		fi
+		if [[ $var == *"i"* ]]; then
+	    	deploy=true;
+	    	echo Will deploy to device;
+	    fi
+		if [[ $var == *"u"* ]]; then
+	    	upload=true;
+			echo Will upload to crashlytics;
+		fi
+	else
+		flavor=$var;
+	fi
+done
+
+
+
+case $flavor in
+fidion)
+	appId="de.fcms.webapp.mywebapp"
+	;;
+fidion_kathrin)
+	appId="de.fcms.webapp.kathrin.testapp"
+	;;
+luzern)
+	appId="de.fcms.webapp.luzernerzeitung"
+	;;
+sk_epaper)
+	appId="com.sk.de"
+	;;
+oon)
+	appId="de.fcms.webapp.oon"
+	;;
+bote)
+	appId="com.soxes.bote"
+	;;
+fnp)
+	appId="de.fcms.webapp.fnp"
+	;;
+frankenpost)
+	appId="de.fcms.webapp.fp"
+	;;
+vaterland)
+	appId="de.fcms.webapp.vaterland"
+	;;
+in_sued)
+	appId="de.fcms.webapp.is"
+	;;
+np)
+	appId="de.fcms.webapp.np"
+	;;
+heidenheim)
+	appId="de.fcms.webapp.hz"
+	;;
+tagblatt)
+	appId="de.fcms.webapp.tagblatt"
+	;;
+volksfreund)
+	appId="de.fcms.webapp.volksfreund"
+	;;
+ka_news)
+	appId="de.fcms.webapp.ka.news"
+	;;
+sk_news)
+	appId="de.fcms.webapp.sk_news"
+	;;
+filmtage)
+	appId="de.fcms.webapp.filmtage"
+	;;
+mp_news)
+	appId="de.fcms.webapp.mp.news"
+	;;
+fnp_news)
+	appId="de.fcms.webapp.fnp.news"
+	;;
+dk_epaper)
+	appId="de.fcms.webapp.dk.epaper"
+	;;
+me_epaper)
+	appId="de.fcms.webapp.mainecho"
+	;;
+gaz)
+	appId="de.fcms.webapp.mdv.gaz"
+	;;
+aaz)
+	appId="de.fcms.webapp.mdv.aaz"
+	;;
+wz)
+	appId="de.fcms.webapp.mdv.wz"
+	;;
+esac
+
+Flavor="$(tr '[:lower:]' '[:upper:]' <<< ${flavor:0:1})${flavor:1}"
+Variant="$(tr '[:lower:]' '[:upper:]' <<< ${variant:0:1})${variant:1}"
+
+if [[ $build == true ]]; then
+	gradlew --project-prop appId=$appId --stacktrace uninstall$Flavor"Release" uninstall$Flavor"Debug" clean assemble$Flavor$Variant
+fi
+
+if [[ $deploy == true ]]; then
+	echo Installing ./app/build/outputs/apk/app-$flavor-$variant.apk
+	adb install -r ./app/build/outputs/apk/app-$flavor-$variant.apk
+fi
+
+if [[ $upload == true ]]; then
+	echo Distributing $Flavor"Release" to crashlytics.
+	gradlew crashlyticsUploadDistribution$Flavor"Release"
+	echo Done.
+fi

@@ -50,6 +50,17 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
 - ```gw``` -> gulp && gulp watch
 - ```addprox``` -> Runs ```gulp add-proxy``` (a proxy is used in camigolo; can be found in the project's gulpfile.js)
 
+### Fidion:
+- ```fd``` -> Build a new fidion apk
+	- Params:
+		- App flavor (see list of case-statements below).
+ 		- The other params must be prefixed with a '-' and can be combined (e.g. -bri to build a release apk and deploy it to the device).
+ 			- b -> Build new apk
+ 			- r -> Use release apk
+ 			- i -> Deploy apk to device
+ 		 	- u -> Uplad apk to crashlytics
+- ```fverivy``` -> Check style, run tests, find potential bugs.
+
 ### Other:
 - ```scripts-update```-> Pull from origin and make files executable.
 
