@@ -44,7 +44,7 @@ done
 
 # Make sure that everything is up to date (pull beforehand, if necessary)
 # (proxy is used in camigolo; add-proxy and remove-proxy can be found in the project's gulpfile)
-gulp && gulp remove-proxy;
+gulp # && gulp remove-proxy;
 
 #Build release or debug apk, automatically using the signing data from release-signing.properties (see above)
 ionic build android --$signingConfig;
