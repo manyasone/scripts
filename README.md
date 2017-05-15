@@ -57,7 +57,7 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
  		- The other params must be prefixed with a '-' and can be combined (e.g. -bri to build a release apk and deploy it to the device).
  			- b -> Build new apk
  			- r -> Use release apk
- 			- i -> Deploy apk to device
+ 			- i -> Install apk to device
  		 	- u -> Uplad apk to crashlytics
  		 	- v -> Reset build version code
  		 	- d -> Delete apk before installing
@@ -71,7 +71,7 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
 	 		- The other params must be prefixed with a '-' and can be combined (e.g. -bri to build a release apk and deploy it to the device).
 	 			- b -> Build new apk
 	 			- r -> Use release apk
-	 			- i -> Deploy apk to device
+	 			- i -> Install apk to device
  		 		- d -> Delete apk before installing
 
 
