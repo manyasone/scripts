@@ -1,0 +1,26 @@
+#!/bin/bash
+
+cd land;
+
+for D in `find . -mindepth 1 -maxdepth 1 -type d`
+do
+    echo $D;
+    cd $D;
+    mv -i -v ./splash/land/* .;
+    rm -R ./splash/;
+    cd ..;
+done
+
+rename -v 's/drawable-/drawable-land-/' *
+
+cd ..;
+cd port;
+
+for D in `find . -mindepth 1 -maxdepth 1 -type d`
+do
+    echo $D;
+    cd $D;
+    mv -i -v ./splash/port/* .;
+    rm -R ./splash/;
+    cd ..;
+done
