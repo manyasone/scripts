@@ -6,41 +6,56 @@
 #	- These must be prefixed with a '-' and can be combined
 #	  (e.g. -bri to build a release apk and deploy it to the device).
 #		b -> Build new apk
-#		r -> Use release apk
 #		i -> Deploy apk to device
+#		r -> Use release apk
+#		d -> Uninstall existing apk
 #		u -> Uplad apk to crashlytics
+#		v -> Discard version code changes
+#
 
 flavor="invalid"
 build=false
 variant="debug"
 deploy=false
 upload=false
+delete=false
 
 for var in "$@"
 do
 	if [[ ${var:0:1} == "-" ]]; then
 		if [[ $var == *"b"* ]]; then
 			build=true;
-    		echo Will build new apk;
+    		printf "****** Build new apk\n";
 		fi
 		if [[ $var == *"r"* ]]; then
 			variant="release";
-    		echo Will use release apk;
+    		printf "****** Build variant: Release\n";
+		fi
+		if [[ $var == *"d"* ]]; then
+	    	delete=true;
+			printf "****** Delete existing apk \n";
 		fi
 		if [[ $var == *"i"* ]]; then
 	    	deploy=true;
-	    	echo Will deploy to device;
+	    	printf "****** Install to device\n";
 	    fi
 		if [[ $var == *"u"* ]]; then
 	    	upload=true;
-			echo Will upload to crashlytics;
+			printf "****** Upload to crashlytics\n";
+		fi
+		if [[ $var == *"v"* ]]; then
+	    	git checkout -- app/config/versioncode/versioncode.properties
+			printf "****** Version code changes have been discarded\n";
 		fi
 	else
 		flavor=$var;
 	fi
 done
 
-
+if [[ $flavor == "invalid" ]]; then
+	printf "****** No flavor param found, abortin\gn"
+	exit 1;
+fi
 
 case $flavor in
 fidion)
@@ -121,7 +136,12 @@ Flavor="$(tr '[:lower:]' '[:upper:]' <<< ${flavor:0:1})${flavor:1}"
 Variant="$(tr '[:lower:]' '[:upper:]' <<< ${variant:0:1})${variant:1}"
 
 if [[ $build == true ]]; then
-	gradlew --project-prop appId=$appId --stacktrace uninstall$Flavor"Release" uninstall$Flavor"Debug" clean assemble$Flavor$Variant
+	gradlew --project-prop appId=$appId --stacktrace clean assemble$Flavor$Variant
+fi
+
+if [[ $delete == true ]]; then
+	echo Uninstalling ./app/build/outputs/apk/app-$flavor-$variant.apk
+	gradlew uninstall$Flavor"Release" uninstall$Flavor"Debug"
 fi
 
 if [[ $deploy == true ]]; then
