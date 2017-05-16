@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# Push current branch to origin, if it's new
-
-branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
-
-git push --set-upstream origin $branch

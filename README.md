@@ -41,7 +41,7 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
 - ```git new``` -> Fetch & pull on current branch, checkout new branch in ticket folder.
     - Mandatory param: ticketNumber.
 - ```git newfromdev``` -> Checkout dev branch, perform ```git new```
-- ```git pushnew``` -> Push current $branch to origin/$branch, if it's new.
+- ```git publish``` -> Push current $branch to origin/$branch, if it's new.
 - ```git remove``` -> Remove branch locally and on origin.
 - ```git todev``` -> Merge branch to dev branch and delete it afterwards.
     - Optional param: [ticketNumber].
