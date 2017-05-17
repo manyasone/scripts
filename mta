@@ -17,6 +17,13 @@ variant="debug"
 deploy=false
 delete=false
 
+# Goto mt-directory, if no params are passed.
+if [[ $# == 0 ]]; then
+	cd ~/git/app/mt\ android
+	exit 1;
+fi
+
+
 for var in "$@"
 do
 	if [[ ${var:0:1} == "-" ]]; then
@@ -38,24 +45,33 @@ do
 	    fi
 	else
 		flavor=$var;
+		printf "****** Flavor: $flavor\n";
 	fi
 done
+
+Flavor="$(tr '[:lower:]' '[:upper:]' <<< ${flavor:0:1})${flavor:1}"
+Variant="$(tr '[:lower:]' '[:upper:]' <<< ${variant:0:1})${variant:1}"
 
 if [[ $build == true ]]; then
 	gradlew assemble$Flavor$Variant
 fi
 
 if [[ $delete == true ]]; then
-	if [[ $flavor != true ]]; then
+	if [[ $Flavor != "" ]]; then
 		echo Uninstalling ./app/build/outputs/apk/app-$flavor-$variant.apk
 		gradlew uninstall$Flavor"Release" uninstall$Flavor"Debug"
 	else
 		echo Uninstalling all app flavors
-		gradlew uninstallAll
+		gradlew uninstallFreeDebug uninstallFreeRelease uninstallPaidDebug uninstallPaidRelease
 	fi
 fi
 
 if [[ $deploy == true ]]; then
-	echo Installing ./app/build/outputs/apk/app-$flavor-$variant.apk
-	adb install -r ./app/build/outputs/apk/app-$flavor-$variant.apk
+	if [[ $Flavor != "" ]]; then
+		echo Installing ./app/build/outputs/apk/app-$flavor-$variant.apk
+		gradlew install$Flavor$Variant
+	else
+		echo "Installing paid and free flavor."
+		gradlew installPaid$Variant installFree$Variant
+	fi
 fi

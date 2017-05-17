@@ -65,7 +65,7 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
 
 ### Other:
 - ```scripts-update```-> Pull from origin and make files executable.
-- ```gh``` -> Gradle Helper script
+- ```mta``` -> Gradle Helper script
 	- Params:
 			- App flavor (optional).
 	 		- The other params must be prefixed with a '-' and can be combined (e.g. -bri to build a release apk and deploy it to the device).
