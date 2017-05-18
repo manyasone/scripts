@@ -19,7 +19,7 @@ delete=false
 
 # Goto mt-directory, if no params are passed.
 if [[ $# == 0 ]]; then
-	cd ~/git/app/mt\ android
+	mehrtanken;
 	exit 1;
 fi
 

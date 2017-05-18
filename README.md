@@ -45,6 +45,7 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
 - ```git remove``` -> Remove branch locally and on origin.
 - ```git todev``` -> Merge branch to dev branch and delete it afterwards.
     - Optional param: [ticketNumber].
+- ```git discard``` -> Discard all uncommited changes (equal to ```git checkout -- .```).
 
 ### Gulp:
 - ```gw``` -> gulp && gulp watch

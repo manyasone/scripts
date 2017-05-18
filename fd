@@ -20,6 +20,10 @@ deploy=false
 upload=false
 delete=false
 
+if [[ $# == 0 ]]; then
+	exit 1
+fi
+
 for var in "$@"
 do
 	if [[ ${var:0:1} == "-" ]]; then
@@ -146,7 +150,7 @@ fi
 
 if [[ $deploy == true ]]; then
 	echo Installing ./app/build/outputs/apk/app-$flavor-$variant.apk
-	adb install -r ./app/build/outputs/apk/app-$flavor-$variant.apk
+	gradlew install$Flavor$Variant
 fi
 
 if [[ $upload == true ]]; then

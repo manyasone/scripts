@@ -1,0 +1,22 @@
+#!/bin/bash
+
+prompt()
+{
+	echo "Discard all uncommited file changes? (y/n)"
+	read -rsn1 response
+	if [ "$response" == "y" ]; then
+		git checkout -- .
+		echo "Discarded all changes."
+	elif [ "$response" == "n" ]; then
+		echo "Aborted."
+		exit 1
+	else
+		prompt
+	fi
+}
+
+prompt
+
+
+
+
