@@ -1,0 +1,8 @@
+#!/bin/bash
+
+ # Quickly stage all changes an commit them using the message in param $1.
+if [ "$#" -eq 0 ]; then
+	echo No commit message passed, will do nothing.
+elif [ "$#" -eq 1 ]; then
+	git add . && git commit -m "$1"
+fi

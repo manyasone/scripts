@@ -45,6 +45,7 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
 - ```git remove``` -> Remove branch locally and on origin.
 - ```git todev``` -> Merge branch to dev branch and delete it afterwards.
     - Optional param: [ticketNumber].
+- ```git discard``` -> Discard all uncommited changes (equal to ```git checkout -- .```).
 
 ### Gulp:
 - ```gw``` -> gulp && gulp watch
@@ -65,7 +66,7 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
 
 ### Other:
 - ```scripts-update```-> Pull from origin and make files executable.
-- ```gh``` -> Gradle Helper script
+- ```mta``` -> Gradle Helper script
 	- Params:
 			- App flavor (optional).
 	 		- The other params must be prefixed with a '-' and can be combined (e.g. -bri to build a release apk and deploy it to the device).
