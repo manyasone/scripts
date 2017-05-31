@@ -4,5 +4,6 @@
 
 ((!$#)) && echo No branch name, command ignored! && exit 1
 
+git fetch;
 echo ticket/$1;
 git checkout ticket/$1;
