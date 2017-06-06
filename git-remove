@@ -6,7 +6,7 @@
 
 for var in "$@"
 do
-    if [[ !($var =~ \*|master|slave|dev|alpha|beta|release) ]]; then
+    if [[ !($var =~ \*|master|slave|dev|release) ]]; then
     	branch=$var;
     	if [[ $var =~ ^?[0-9]+$ ]]; then
     		branch="ticket/"$var;
@@ -15,6 +15,6 @@ do
 		git branch -d $branch;
     	git push origin --delete $branch;
     else
-		echo "Won\'t remove $var, as its name contains *|master|slave|dev|alpha|beta|release"x.
+		echo "Won\'t remove $var, as its name contains *|master|slave|dev|release".
     fi
 done
