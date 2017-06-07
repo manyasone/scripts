@@ -57,25 +57,25 @@ Flavor="$(tr '[:lower:]' '[:upper:]' <<< ${flavor:0:1})${flavor:1}"
 Variant="$(tr '[:lower:]' '[:upper:]' <<< ${variant:0:1})${variant:1}"
 
 if [[ $build == true ]]; then
-	gradlew assemble$Flavor$Variant
+	./gradlew assemble$Flavor$Variant
 fi
 
 if [[ $delete == true ]]; then
 	if [[ $Flavor != "" ]]; then
 		echo Uninstalling ./app/build/outputs/apk/app-$flavor-$variant.apk
-		gradlew uninstall$Flavor"Release" uninstall$Flavor"Debug"
+		./gradlew uninstall$Flavor"Release" uninstall$Flavor"Debug"
 	else
 		echo Uninstalling all app flavors
-		gradlew uninstallFreeDebug uninstallFreeRelease uninstallPaidDebug uninstallPaidRelease
+		./gradlew uninstallFreeDebug uninstallFreeRelease uninstallPaidDebug uninstallPaidRelease
 	fi
 fi
 
 if [[ $deploy == true ]]; then
 	if [[ $Flavor != "" ]]; then
 		echo Installing ./app/build/outputs/apk/app-$flavor-$variant.apk
-		gradlew install$Flavor$Variant
+		./gradlew install$Flavor$Variant
 	else
 		echo "Installing paid and free flavor."
-		gradlew installPaid$Variant installFree$Variant
+		./gradlew installPaid$Variant installFree$Variant
 	fi
 fi
