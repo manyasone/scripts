@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [[ "$#" -eq 2 ]]; then
+	echo "Will rename $1 to $2";
+	git checkout $1 && git checkout -b $2 && git publish && git branch -d $1 && git push origin --delete $1;
+else
+	echo Invalid number of parameters. Usage: \"rename \$from \$to\"
+fi

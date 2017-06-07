@@ -4,6 +4,9 @@
 # If ticket number is parsed as param, try to merge ticket/$1 to dev
 # If no param is passed, try to merge current branch.
 
+# Set excluded branches
+excludedBranches="(^\*|master|slave|dev|alpha|beta|release)"
+
 if [ "$#" -eq 0 ]; then
     branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
     ticketNumber=${branch:7};
@@ -12,7 +15,10 @@ if [ "$#" -eq 0 ]; then
         echo "No ticket number present, aborting!";
     else
         git checkout dev && git fetch && git pull && git merge $branch && git push && git remove $ticketNumber;
-fi
+    fi
 else
-    git checkout dev && git fetch && git pull && git merge origin/ticket/$1 && git push && git remove $1;
+	for var in "$@"
+	do
+	    git checkout dev && git fetch && git pull && git merge origin/ticket/var && git push && git remove var;
+	done
 fi

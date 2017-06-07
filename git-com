@@ -5,10 +5,13 @@
 branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
 commitType="refs"
 message=""
+ticketNumber=""
 
-# Get ticketNumber by removing 'ticket/' from the branch's name.
-# Probably could be improved, to get everything after the last slash.
-ticketNumber=${branch:7};
+# Get ticketNumber by removing 'ticket/' from the branch's name,
+# if branch name begins with "ticket/"
+if [[ ${branch:0:7} == "ticket/" ]]; then
+	ticketNumber=${branch:7};
+fi
 
 # If three params are passed:
 if [ "$#" -eq 3 ]; then
@@ -27,19 +30,17 @@ elif [ "$#" -eq 2 ]; then
 elif [ "$#" -eq 1 ]; then
     # $1: Commit message;
     # ticketNo is computed automatically. Only use this with branch names that fit the 'ticket/#'-pattern
-    if [ -z "$ticketNumber" ]; then
-        echo "No ticket number present, aborting!";
-    else
-        message=$1
-    fi
+    message=$1
 else
     echo "Illegal number of parameters";
 fi
 
-if [ -z "$ticketNumber" ]; then
-        echo "No ticket number present, aborting!";
+if [ -z "$ticketNumber" ] ; then
+	echo "No ticket number, aborting!";
+elif [[ $ticketNumber =~ ^?[0-9]+$ ]]; then
+	echo "Malformed ticket number, aborting!";
 elif [ -z "$message" ]; then
-        echo "No commit message present, aborting!";
+    echo "No commit message, aborting!";
 else
     git commit -m "[$commitType #$ticketNumber] $message";
 fi

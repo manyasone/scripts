@@ -7,7 +7,7 @@
 # Its remote sibling will be deleted, if it does not fit the excluded pattern.
 
 # Set excluded branches
-excludedBranches="(^\*|master|slave|dev|alpha|beta)"
+excludedBranches="(^\*|master|slave|dev|alpha|beta|release)"
 
 # Get local and remote branches, that do not fit the patterns
 mergedLocals=$(git branch --merged | egrep -v $excludedBranches);

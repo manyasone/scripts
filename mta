@@ -9,6 +9,7 @@
 #		i -> Install apk to device
 #		r -> Use release apk
 #		d -> Uninstall existing apk
+#		o -> Open apk folder
 #
 
 flavor=""
@@ -42,6 +43,9 @@ do
 		if [[ $var == *"i"* ]]; then
 	    	deploy=true;
 	    	printf "****** Install to device\n";
+	    fi
+		if [[ $var == *"o"* ]]; then
+	    	open ./app/apk; xdg-open ./app/apk
 	    fi
 	else
 		flavor=$var;
