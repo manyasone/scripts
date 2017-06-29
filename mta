@@ -17,6 +17,7 @@ build=false
 variant="debug"
 deploy=false
 delete=false
+openFolder=false
 
 # Goto mt-directory, if no params are passed.
 if [[ $# == 0 ]]; then
@@ -45,7 +46,8 @@ do
 	    	printf "****** Install to device\n";
 	    fi
 		if [[ $var == *"o"* ]]; then
-	    	open ./app/apk; xdg-open ./app/apk
+			openFolder=true
+	        printf "****** Open apk folder when done\n";
 	    fi
 	else
 		flavor=$var;
@@ -78,4 +80,8 @@ if [[ $deploy == true ]]; then
 		echo "Installing paid and free flavor."
 		./gradlew installPaid$Variant installFree$Variant
 	fi
+fi
+
+if [[ $openFolder == true ]]; then
+	open ./app/apk; xdg-open ./app/apk
 fi
