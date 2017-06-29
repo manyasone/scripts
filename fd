@@ -13,7 +13,8 @@
 #		v -> Discard version code changes
 #
 
-flavor="invalid"
+flavors=()
+ticket="invalid"
 build=false
 variant="debug"
 deploy=false
@@ -21,6 +22,7 @@ upload=false
 delete=false
 
 if [[ $# == 0 ]]; then
+	printf "No params passed.\n"
 	exit 1
 fi
 
@@ -51,111 +53,126 @@ do
 	    	git checkout -- app/config/versioncode/versioncode.properties
 			printf "****** Version code changes have been discarded\n";
 		fi
+	elif echo $var | egrep -q '^[0-9]+$'; then
+		ticket=$var
+		printf "****** Will commit build number changes using ticket #$ticket\n";
 	else
-		flavor=$var;
+		flavors+=($var)
 	fi
 done
 
-if [[ $flavor == "invalid" ]]; then
-	printf "****** No flavor param found, abortin\gn"
+if [[ ${#flavors[@]} -eq 0 ]]; then
+	printf "****** No flavor param found, aborting\n"
 	exit 1;
 fi
 
-case $flavor in
-fidion)
-	appId="de.fcms.webapp.mywebapp"
-	;;
-fidion_kathrin)
-	appId="de.fcms.webapp.kathrin.testapp"
-	;;
-luzern)
-	appId="de.fcms.webapp.luzernerzeitung"
-	;;
-sk_epaper)
-	appId="com.sk.de"
-	;;
-oon)
-	appId="de.fcms.webapp.oon"
-	;;
-bote)
-	appId="com.soxes.bote"
-	;;
-fnp)
-	appId="de.fcms.webapp.fnp"
-	;;
-frankenpost)
-	appId="de.fcms.webapp.fp"
-	;;
-vaterland)
-	appId="de.fcms.webapp.vaterland"
-	;;
-in_sued)
-	appId="de.fcms.webapp.is"
-	;;
-np)
-	appId="de.fcms.webapp.np"
-	;;
-heidenheim)
-	appId="de.fcms.webapp.hz"
-	;;
-tagblatt)
-	appId="de.fcms.webapp.tagblatt"
-	;;
-volksfreund)
-	appId="de.fcms.webapp.volksfreund"
-	;;
-ka_news)
-	appId="de.fcms.webapp.ka.news"
-	;;
-sk_news)
-	appId="de.fcms.webapp.sk_news"
-	;;
-filmtage)
-	appId="de.fcms.webapp.filmtage"
-	;;
-mp_news)
-	appId="de.fcms.webapp.mp.news"
-	;;
-fnp_news)
-	appId="de.fcms.webapp.fnp.news"
-	;;
-dk_epaper)
-	appId="de.fcms.webapp.dk.epaper"
-	;;
-me_epaper)
-	appId="de.fcms.webapp.mainecho"
-	;;
-gaz)
-	appId="de.fcms.webapp.mdv.gaz"
-	;;
-aaz)
-	appId="de.fcms.webapp.mdv.aaz"
-	;;
-wz)
-	appId="de.fcms.webapp.mdv.wz"
-	;;
-esac
+for i in ${!flavors[@]}; do
 
-Flavor="$(tr '[:lower:]' '[:upper:]' <<< ${flavor:0:1})${flavor:1}"
-Variant="$(tr '[:lower:]' '[:upper:]' <<< ${variant:0:1})${variant:1}"
+	flavor="${flavors[$i]}"
+	printf "****** $flavor task started\n"
 
-if [[ $build == true ]]; then
-	./gradlew --project-prop appId=$appId --stacktrace clean assemble$Flavor$Variant
-fi
+	case $flavor in
+	fidion)
+		appId="de.fcms.webapp.mywebapp"
+		;;
+	fidion_kathrin)
+		appId="de.fcms.webapp.kathrin.testapp"
+		;;
+	luzern)
+		appId="de.fcms.webapp.luzernerzeitung"
+		;;
+	sk_epaper)
+		appId="com.sk.de"
+		;;
+	oon)
+		appId="de.fcms.webapp.oon"
+		;;
+	bote)
+		appId="com.soxes.bote"
+		;;
+	fnp)
+		appId="de.fcms.webapp.fnp"
+		;;
+	frankenpost)
+		appId="de.fcms.webapp.fp"
+		;;
+	vaterland)
+		appId="de.fcms.webapp.vaterland"
+		;;
+	in_sued)
+		appId="de.fcms.webapp.is"
+		;;
+	np)
+		appId="de.fcms.webapp.np"
+		;;
+	heidenheim)
+		appId="de.fcms.webapp.hz"
+		;;
+	tagblatt)
+		appId="de.fcms.webapp.tagblatt"
+		;;
+	volksfreund)
+		appId="de.fcms.webapp.volksfreund"
+		;;
+	ka_news)
+		appId="de.fcms.webapp.ka.news"
+		;;
+	sk_news)
+		appId="de.fcms.webapp.sk_news"
+		;;
+	filmtage)
+		appId="de.fcms.webapp.filmtage"
+		;;
+	mp_news)
+		appId="de.fcms.webapp.mp.news"
+		;;
+	fnp_news)
+		appId="de.fcms.webapp.fnp.news"
+		;;
+	dk_epaper)
+		appId="de.fcms.webapp.dk.epaper"
+		;;
+	me_epaper)
+		appId="de.fcms.webapp.mainecho"
+		;;
+	gaz)
+		appId="de.fcms.webapp.mdv.gaz"
+		;;
+	aaz)
+		appId="de.fcms.webapp.mdv.aaz"
+		;;
+	wz)
+		appId="de.fcms.webapp.mdv.wz"
+		;;
+	esac
 
-if [[ $delete == true ]]; then
-	echo Uninstalling $Flavor
-	./gradlew uninstall$Flavor"Release" uninstall$Flavor"Debug"
-fi
+	Flavor="$(tr '[:lower:]' '[:upper:]' <<< ${flavor:0:1})${flavor:1}"
+	Variant="$(tr '[:lower:]' '[:upper:]' <<< ${variant:0:1})${variant:1}"
 
-if [[ $deploy == true ]]; then
-	echo Installing $Flavor $Variant
-	./gradlew install$Flavor$Variant
+	if [[ $build == true ]]; then
+		./gradlew --project-prop appId=$appId --stacktrace clean assemble$Flavor$Variant
 
-fi
+		if [[ $ticket != "invalid" && $variant == "release" ]]; then
+			git add ./app/config/versioncode/versioncode.properties;
+			git commit -m "$flavor - Ticket #$ticket: Neuer Build."
+		fi
+	fi
 
-if [[ $upload == true ]]; then
-	echo Distributing $Flavor"Release" to crashlytics.
-	./gradlew crashlyticsUploadDistribution$Flavor"Release"
-	echo Done.
-fi
+	if [[ $delete == true ]]; then
+		echo Uninstalling $Flavor
+		./gradlew uninstall$Flavor"Release" uninstall$Flavor"Debug"
+	fi
+
+	if [[ $deploy == true ]]; then
+		echo Installing $Flavor $Variant
+		./gradlew install$Flavor$Variant
+
+	fi
+
+	if [[ $upload == true ]]; then
+		echo Distributing $Flavor"Release" to crashlytics.
+		./gradlew crashlyticsUploadDistribution$Flavor"Release"
+		echo Done.
+	fi
+
+done
