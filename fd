@@ -20,6 +20,7 @@ variant="debug"
 deploy=false
 upload=false
 delete=false
+openFolder=false
 
 if [[ $# == 0 ]]; then
 	printf "No params passed.\n"
@@ -53,6 +54,10 @@ do
 	    	git checkout -- app/config/versioncode/versioncode.properties
 			printf "****** Version code changes have been discarded\n";
 		fi
+		if [[ $var == *"o"* ]]; then
+			openFolder=true
+	        printf "****** Open apk folder when done\n";
+	    fi
 	elif echo $var | egrep -q '^[0-9]+$'; then
 		ticket=$var
 		printf "****** Will commit build number changes using ticket #$ticket\n";
@@ -62,8 +67,12 @@ do
 done
 
 if [[ ${#flavors[@]} -eq 0 ]]; then
-	printf "****** No flavor param found, aborting\n"
-	exit 1;
+	if [[ $openFolder == true ]]; then
+		open ./app/apk; xdg-open ./app/apk
+	else
+		printf "****** No flavor param found, aborting\n"
+		exit 1;
+	fi
 fi
 
 for i in ${!flavors[@]}; do
@@ -176,3 +185,7 @@ for i in ${!flavors[@]}; do
 	fi
 
 done
+
+if [[ $openFolder == true ]]; then
+	open ./app/apk; xdg-open ./app/apk
+fi
