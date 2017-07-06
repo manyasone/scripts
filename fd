@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Build a new fidion apk
 # Params:
@@ -68,11 +68,13 @@ done
 
 if [[ ${#flavors[@]} -eq 0 ]]; then
 	if [[ $openFolder == true ]]; then
-		open ./app/apk; xdg-open ./app/apk
+		openfolder ./app/apk;
 	else
 		printf "****** No flavor param found, aborting\n"
-		exit 1;
 	fi
+
+	exit 1;
+
 fi
 
 for i in ${!flavors[@]}; do
@@ -187,5 +189,5 @@ for i in ${!flavors[@]}; do
 done
 
 if [[ $openFolder == true ]]; then
-	open ./app/apk; xdg-open ./app/apk
+	openfolder ./app/apk;
 fi

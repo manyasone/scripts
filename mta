@@ -83,5 +83,5 @@ if [[ $deploy == true ]]; then
 fi
 
 if [[ $openFolder == true ]]; then
-	open ./app/apk; xdg-open ./app/apk
+	openfolder ./app/apk
 fi

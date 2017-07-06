@@ -74,5 +74,5 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
 	 			- r -> Use release apk
 	 			- i -> Install apk to device
  		 		- d -> Delete apk before installing
-
+- ```openfolder```-> Opens a folder that has been passed as a param. Prevents errors by differentiating between OSX and Linux.
 

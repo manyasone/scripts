@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Opens a folder that has been passed as a param. Prevents errors by differentiating between OSX and Linux.
+
+if [[ $# == 0 ]]; then
+	printf "No params passed.\n"
+	exit 1
+fi
+
+if [ "$(uname)" == "Darwin" ]; then
+	# Do something under Mac OS X platform
+	open $1;
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+	# Do something under GNU/Linux platform
+	xdg-open $1;
+# elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+    # Do something under 32 bits Windows NT platform
+# elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
+    # Do something under 64 bits Windows NT platform
+fi
