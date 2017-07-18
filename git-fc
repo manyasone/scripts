@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# This script helps to commit staged changes.
+
+branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
+apps=""
+message=""
+ticketNumber=""
+
+# Get ticketNumber by removing 'ticket/' from the branch's name,
+# if branch name begins with "ticket/"
+if [[ ${branch:0:7} == "ticket/" ]]; then
+	ticketNumber=${branch:7};
+fi
+
+# If three or more params are passed:
+if [[ "$#" > 2 ]]; then
+    # ($1: ticketNo), $1 or $2 until $penultimate: name1 | name2 | ... , $3: Commit message
+
+	message=${!#} #Last param
+
+	isAnInt='^[0-9]+$'
+    if [[ $1 =~ $isAnInt ]]; then
+    	echo $1 is an int.
+    	startIndex=2;
+    	ticketNumber=$1;
+    	repetitions=$(($#-2))
+    else
+    	echo $1 is not an int.
+    	startIndex=1;
+    	repetitions=$(($#-1))
+    fi
+
+    for var in "${@:$startIndex:$repetitions}"
+	do
+		echo $var
+		apps="$var | $apps"
+	done
+
+# If two params are passed
+elif [ "$#" -eq 2 ]; then
+    # $1: ticketNo, $2: Commit message
+    ticketNumber=$1
+    message=$2
+
+# If one param is passed
+elif [ "$#" -eq 1 ]; then
+    # $1: Commit message;
+    # ticketNo is computed automatically. Only use this with branch names that fit the 'ticket/#'-pattern
+    message=$1
+else
+    echo "Illegal number of parameters";
+fi
+
+if [ -z "$ticketNumber" ] ; then
+	echo "No ticket number, aborting!";
+elif [[ $ticketNumber =~ ^?[0-9]+$ ]]; then
+	echo "Malformed ticket number, aborting!";
+elif [ -z "$message" ]; then
+    echo "No commit message, aborting!";
+else
+    git commit -m $apps"Ticket #$ticketNumber: $message";
+fi
