@@ -60,5 +60,5 @@ elif [[ $ticketNumber =~ ^?[0-9]+$ ]]; then
 elif [ -z "$message" ]; then
     echo "No commit message, aborting!";
 else
-    echo git commit -m "$apps - Ticket #$ticketNumber: $message";
+    git commit -m "$apps - Ticket #$ticketNumber: $message";
 fi
