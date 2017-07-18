@@ -37,6 +37,7 @@ if [[ "$#" > 2 ]]; then
 		apps="$var | $apps"
 	done
     apps=${apps: : -3} #Remove last occurence of ' | '
+    apps="$apps - "
 
 # If two params are passed
 elif [ "$#" -eq 2 ]; then
@@ -60,5 +61,6 @@ elif [[ $ticketNumber =~ ^?[0-9]+$ ]]; then
 elif [ -z "$message" ]; then
     echo "No commit message, aborting!";
 else
-    git commit -m "$apps - Ticket #$ticketNumber: $message";
+    ticketText="Ticket #$ticketNumber: "
+    git commit -m "$apps$ticketText$message";
 fi
