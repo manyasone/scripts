@@ -10,6 +10,7 @@
 #		r -> Use release apk
 #		d -> Uninstall existing apk
 #		o -> Open apk folder
+#		v -> Discard version code changes
 #
 
 flavor=""
@@ -49,6 +50,10 @@ do
 			openFolder=true
 	        printf "****** Open apk folder when done\n";
 	    fi
+		if [[ $var == *"v"* ]]; then
+		    git checkout -- version.properties
+			printf "****** Version code changes have been discarded\n";
+		fi
 	else
 		flavor=$var;
 		printf "****** Flavor: $flavor\n";
