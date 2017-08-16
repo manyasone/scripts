@@ -33,8 +33,13 @@ if [[ "$#" > 2 ]]; then
 
     for var in "${@:$startIndex:$repetitions}"
 	do
-		echo $var
-		apps="$var | $apps"
+        if [[ $var == "-pick" ]]; then
+            pickOnMaster=true
+            echo "Will cherry pick on master branch."
+        else
+			echo $var
+		    apps="$var | $apps"
+        fi
 	done
     apps=${apps: : -3} #Remove last occurence of ' | '
     apps="$apps - "
@@ -63,4 +68,8 @@ elif [ -z "$message" ]; then
 else
     ticketText="Ticket #$ticketNumber: "
     git commit -m "$apps$ticketText$message";
+
+ 	if [[ $pickOnMaster == true ]]; then
+        git pick master
+    fi
 fi
