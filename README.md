@@ -46,6 +46,8 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
 - ```git todev``` -> Merge branch to dev branch and delete it afterwards.
     - Optional param: [ticketNumber].
 - ```git discard``` -> Discard all uncommited changes (equal to ```git checkout -- .```).
+- ```git undo``` -> Undo last commit (equal to ```git reset --mixed $(git rev-parse HEAD~1)```).
+
 
 ### Gulp:
 - ```gw``` -> gulp && gulp watch
