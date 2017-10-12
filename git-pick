@@ -7,7 +7,7 @@ if [[ "$#" == 1 ]]; then
 	currentBranch=$(git rev-parse --abbrev-ref HEAD);
 
 	git checkout $targetBranch;
-	***** WOULD git cherry-pick $hash; *****
+	git cherry-pick $hash;
 	git checkout $currentBranch;
 else
 	Invalid number of params. Should only pass name of target branch.
