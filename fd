@@ -21,6 +21,21 @@ deploy=false
 upload=false
 delete=false
 openFolder=false
+test=false
+releaseNotes=""
+targetApi="invalid"
+
+function writeReleaseNotes() {
+	./gradlew -Pvalue="$releaseNotes" setReleaseNotes
+}
+
+function writeTargetApi() {
+	./gradlew -Pvalue=$1 setTargetApi
+}
+
+function writeTicket() {
+	./gradlew -Pvalue=$1 setTicket
+}
 
 if [[ $# == 0 ]]; then
 	printf "No params passed.\n"
@@ -29,7 +44,12 @@ fi
 
 for var in "$@"
 do
-	if [[ ${var:0:1} == "-" ]]; then
+	if [[ ${var:0:2} == "--" ]]; then
+		if [[ ${var:2} =~ live|beta|admin ]]; then
+			targetApi=${var:2}
+			writeTargetApi ${var:2}
+		fi
+	elif [[ ${var:0:1} == "-" ]]; then
 		if [[ $var == *"b"* ]]; then
 			build=true;
     		printf "****** Build new apk\n";
@@ -58,9 +78,34 @@ do
 			openFolder=true
 	        printf "****** Open apk folder when done\n";
 	    fi
+	    if [[ $var == *"t"* ]]; then
+			test=true
+	        printf "****** Append TEST-Suffix to filename\n";
+	    fi
 	elif echo $var | egrep -q '^[0-9]+$'; then
 		ticket=$var
 		printf "****** Will commit build number changes using ticket #$ticket\n";
+	elif [[ ${var:0:1} == "*" ]]; then
+		releaseNotes=${var:1}
+
+		if [[ $ticket == "invalid" ]]; then
+			branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+			ticketNumber=${branch:7}
+
+			if echo $ticketNumber | egrep -q '^[0-9]+$'; then
+				ticket=$ticketNumber
+			fi
+		fi
+
+		if [[ $ticket != "invalid" ]]; then
+			suffix="Ticket: https://redmine.fidion.de/issues/$ticket"
+		else
+			suffix="Branch: $branch"
+		fi
+
+		releaseNotes="$releaseNotes --- $suffix"
+
+		echo "Release notes: $releaseNotes"
 	else
 		flavors+=($var)
 	fi
@@ -161,12 +206,20 @@ for i in ${!flavors[@]}; do
 	Variant="$(tr '[:lower:]' '[:upper:]' <<< ${variant:0:1})${variant:1}"
 
 	if [[ $build == true ]]; then
-		./gradlew --project-prop appId=$appId --stacktrace clean assemble$Flavor$Variant
 
-		if [[ $ticket != "invalid" && $variant == "release" ]]; then
-			git add ./app/config/versioncode/versioncode.properties;
-			git commit -m "$flavor - Ticket #$ticket: Neuer Build."
+		if [[ $targetApi == "invalid" ]]; then
+			writeTargetApi "live"
 		fi
+
+		if [[ $ticket != "invalid" ]]; then
+			writeTicket $ticket
+		else
+			writeTicket ""
+		fi
+
+		writeReleaseNotes
+
+		./gradlew --project-prop appId=$appId clean assemble$Flavor$Variant
 	fi
 
 	if [[ $delete == true ]]; then
