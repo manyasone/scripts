@@ -221,11 +221,6 @@ for i in ${!flavors[@]}; do
 			writeTicket ""
 		fi
 
-		if [[ $Variant == "Release" ]]; then
-			writeReleaseNotes
-		fi
-
-
 		./gradlew --project-prop appId=$appId clean assemble$Flavor$Variant
 	fi
 
@@ -243,6 +238,7 @@ for i in ${!flavors[@]}; do
 	if [[ $upload == true ]]; then
 
 		writeFlavor $flavor
+		writeReleaseNotes
 
 		echo Distributing $Flavor"Release" to crashlytics.
 		./gradlew crashlyticsUploadDistribution$Flavor"Release"
@@ -252,5 +248,5 @@ for i in ${!flavors[@]}; do
 done
 
 if [[ $openFolder == true ]]; then
-	openfolder ./app/apk;
+	openfolder ./app/apk
 fi
