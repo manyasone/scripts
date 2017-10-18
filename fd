@@ -37,6 +37,10 @@ function writeTicket() {
 	./gradlew -Pvalue=$1 setTicket
 }
 
+function writeFlavor() {
+    ./gradlew -Pvalue=$1 setFlavor
+}
+
 if [[ $# == 0 ]]; then
 	printf "No params passed.\n"
 	exit 1
@@ -217,7 +221,10 @@ for i in ${!flavors[@]}; do
 			writeTicket ""
 		fi
 
-		writeReleaseNotes
+        if [[ $variant == "release" ]]; then
+            writeFlavor $flavor
+            writeReleaseNotes
+        fi
 
 		./gradlew --project-prop appId=$appId clean assemble$Flavor$Variant
 	fi

@@ -13,8 +13,8 @@ if [[ ${branch:0:7} == "ticket/" ]]; then
 	ticketNumber=${branch:7};
 fi
 
-# If three or more params are passed:
-if [[ "$#" > 2 ]]; then
+# If two or more params are passed:
+if [[ "$#" > 1 ]]; then
     # ($1: ticketNo), $1 or $2 until $penultimate: name1 | name2 | ... , $3: Commit message
 
 	message=${!#} #Last param
