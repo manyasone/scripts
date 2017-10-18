@@ -64,6 +64,11 @@ Flavor="$(tr '[:lower:]' '[:upper:]' <<< ${flavor:0:1})${flavor:1}"
 Variant="$(tr '[:lower:]' '[:upper:]' <<< ${variant:0:1})${variant:1}"
 
 if [[ $build == true ]]; then
+
+    if [[ $variant == 'release' ]]; then
+        ./gradlew incrementBuild
+    fi
+
 	./gradlew assemble$Flavor$Variant
 fi
 
