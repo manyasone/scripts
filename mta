@@ -77,16 +77,11 @@ if [[ $build == true ]]; then
 	if [[ $variant == "release" && $signature == "signed" ]]; then
 		./gradlew clean
 
-		# TODO: Verwenden, sobald jenkins-Branch gemerged wurde.
-        # ./gradlew incrementBuild
+        ./gradlew incrementBuildNumber
 	fi
 
 	if [[ $flavor == "" ]]; then
 		./gradlew assembleFree$Signature$Variant
-
-		# Workaround, um doppelt erhöhten Versionscode zu vermeiden.
-		# Fällt weg, sobald jenkins-Branch gemerged wurde.
-		git checkout -- version.properties
 
 		./gradlew assemblePaid$Signature$Variant
 	else
