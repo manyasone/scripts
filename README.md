@@ -72,9 +72,11 @@ Note: Most of these scripts assume that ticket branches are located in _ticket/$
 	- Params:
 			- App flavor (optional).
 	 		- The other params must be prefixed with a '-' and can be combined (e.g. -bri to build a release apk and deploy it to the device).
-	 			- b -> Build new apk
-	 			- r -> Use release apk
-	 			- i -> Install apk to device
- 		 		- d -> Delete apk before installing
+               - b -> Build new apk
+               - i -> Install apk to device
+               - r -> Use release apk
+               - d -> Uninstall existing apk
+               - o -> Open apk folder
+               - v -> Discard version code changes
+               - u -> Unsigned build (`signed` is default for variant `release`, while `unsigned` is default for variant `debug`)
 - ```openfolder```-> Opens a folder that has been passed as a param. Prevents errors by differentiating between OSX and Linux.
-
