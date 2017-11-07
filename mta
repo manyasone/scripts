@@ -11,6 +11,7 @@
 #		d -> Uninstall existing apk
 #		o -> Open apk folder
 #		v -> Discard version code changes
+#		u -> Unsigned build (`signed` is default for variant `release`, while `unsigned` is default for variant `debug`)
 #
 
 flavor=""
@@ -19,6 +20,7 @@ variant="debug"
 deploy=false
 delete=false
 openFolder=false
+signature="signed"
 
 # Goto mt-directory, if no params are passed.
 if [[ $# == 0 ]]; then
@@ -54,17 +56,56 @@ do
 		    git checkout -- version.properties
 			printf "****** Version code changes have been discarded\n";
 		fi
+		if [[ $var == *"u"* ]]; then
+			signature="unsigned"
+		fi
 	else
 		flavor=$var;
 		printf "****** Flavor: $flavor\n";
 	fi
 done
 
+if [[ $variant == "debug" ]]; then
+	signature="unsigned"
+fi
+
 Flavor="$(tr '[:lower:]' '[:upper:]' <<< ${flavor:0:1})${flavor:1}"
 Variant="$(tr '[:lower:]' '[:upper:]' <<< ${variant:0:1})${variant:1}"
+Signature="$(tr '[:lower:]' '[:upper:]' <<< ${signature:0:1})${signature:1}"
 
 if [[ $build == true ]]; then
-	./gradlew assemble$Flavor$Variant
+	if [[ $variant == "release" && $signature == "signed" ]]; then
+		./gradlew clean
+	fi
+
+	if [[ $flavor == "" ]]; then
+		./gradlew assembleFree$Signature$Variant
+
+		#Workaround, um doppelt erhöhten Versionscode zu vermeiden.
+		git checkout -- version.properties
+
+		./gradlew assemblePaid$Signature$Variant
+	else
+		./gradlew assemble$Flavor$Signature$Variant
+	fi
+
+	if [[ $variant == "release" && $signature == "signed" ]]; then
+		echo "Will copy apk and mapping files."
+		if [[ $flavor == "" || $flavor == "paid" ]]; then
+			echo Copying ./app/build/outputs/apk/paidSigned/release/*.apk to ./app/apk/release
+			cp ./app/build/outputs/apk/paidSigned/release/*.apk ./app/apk/release
+			echo Copying ./app/build/outputs/apk/paidSigned/release/*.mapping to ./app/apk/release
+			cp ./app/build/outputs/apk/paidSigned/release/*.mapping ./app/apk/release
+		fi
+		if [[ $flavor == "" || $flavor == "free" ]]; then
+			echo Copying ./app/build/outputs/apk/freeSigned/release/*.apk to ./app/apk/release
+			cp ./app/build/outputs/apk/freeSigned/release/*.apk ./app/apk/release
+			echo Copying ./app/build/outputs/apk/freeSigned/release/*.mapping to ./app/apk/release
+			cp ./app/build/outputs/apk/freeSigned/release/*.mapping ./app/apk/release
+		fi
+	else
+		echo "Will not copy apk and mapping files."
+	fi
 fi
 
 if [[ $delete == true ]]; then
@@ -80,10 +121,11 @@ fi
 if [[ $deploy == true ]]; then
 	if [[ $Flavor != "" ]]; then
 		echo Installing ./app/build/outputs/apk/app-$flavor-$variant.apk
-		./gradlew install$Flavor$Variant
+		"./gradlew install"$Flavor"Signed"$Variant
 	else
 		echo "Installing paid and free flavor."
-		./gradlew installPaid$Variant installFree$Variant
+		./gradlew installPaidSigned$Variant
+		./gradlew installFreeSigned$Variant
 	fi
 fi
 
