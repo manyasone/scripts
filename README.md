@@ -10,7 +10,7 @@ Assuming that you want to place the scripts in a folder named _~/bin_:
 3. Make all files in _~/bin_ executable: ```chmod +x ~/bin/*```.
 
 ## List of scripts
-Params in '[]' are optional.
+Params in `[]` are optional.
 
 ### Ionic:
 Note: Execute these scripts in the project's root folder.
