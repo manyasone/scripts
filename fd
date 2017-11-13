@@ -227,6 +227,11 @@ for i in ${!flavors[@]}; do
 		fi
 
 		./gradlew --project-prop appId=$appId clean assemble$Flavor$Variant
+
+		if [[ $variant == "release" ]]; then
+			echo Copying ./app/build/outputs/apk/$flavor/release/*.apk to ./app/apk/
+			cp ./app/build/outputs/apk/freeSigned/$flavor/*.apk ./app/apk/
+		fi
 	fi
 
 	if [[ $delete == true ]]; then

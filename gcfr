@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Check out ticket with passed #number
+
+((!$#)) && echo No branch name, command ignored! && exit 1
+
+git fetch;
+echo release/$1.0;
+git checkout release/$1.0;
