@@ -254,10 +254,5 @@ for i in ${!flavors[@]}; do
 done
 
 if [[ $openFolder == true ]]; then
-<<<<<<< HEAD
 	openfolder ./app/apk;
 fi
-=======
-	openfolder ./app/apk
-fi
->>>>>>> 2011d358ab6ba673dc8289d298628baee0404723
