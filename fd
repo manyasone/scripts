@@ -38,7 +38,7 @@ function writeTicket() {
 }
 
 function writeFlavor() {
-    ./gradlew -Pvalue=$1 setFlavor
+	./gradlew -Pvalue=$1 setFlavor
 }
 
 if [[ $# == 0 ]]; then
@@ -221,12 +221,17 @@ for i in ${!flavors[@]}; do
 			writeTicket ""
 		fi
 
-        if [[ $variant == "release" ]]; then
-            writeFlavor $flavor
-            writeReleaseNotes
-        fi
+		if [[ $variant == "release" ]]; then
+			writeFlavor $flavor
+			writeReleaseNotes
+		fi
 
 		./gradlew --project-prop appId=$appId clean assemble$Flavor$Variant
+
+		if [[ $variant == "release" ]]; then
+			echo Copying ./app/build/outputs/apk/$flavor/release/*.apk to ./app/apk/
+			cp ./app/build/outputs/apk/freeSigned/$flavor/*.apk ./app/apk/
+		fi
 	fi
 
 	if [[ $delete == true ]]; then
@@ -249,5 +254,10 @@ for i in ${!flavors[@]}; do
 done
 
 if [[ $openFolder == true ]]; then
+<<<<<<< HEAD
 	openfolder ./app/apk;
 fi
+=======
+	openfolder ./app/apk
+fi
+>>>>>>> 2011d358ab6ba673dc8289d298628baee0404723
