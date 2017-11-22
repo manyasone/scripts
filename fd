@@ -231,7 +231,7 @@ for i in ${!flavors[@]}; do
 
 	if [[ $delete == true ]]; then
 		echo Uninstalling $Flavor
-		./gradlew uninstall$Flavor"Release" uninstall$Flavor"Debug"
+		./gradlew uninstall${Flavor}Release uninstall${Flavor}Debug
 	fi
 
 	if [[ $deploy == true ]]; then
@@ -241,8 +241,8 @@ for i in ${!flavors[@]}; do
 	fi
 
 	if [[ $upload == true ]]; then
-		echo Distributing $Flavor"Release" to crashlytics.
-		./gradlew crashlyticsUploadDistribution$Flavor"Release"
+		echo Distributing ${Flavor}Release to crashlytics.
+		./gradlew test${Flavor}DebugUnittest checkstyle findbugs crashlyticsUploadDistribution${Flavor}Release
 		echo Done.
 	fi
 

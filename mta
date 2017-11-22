@@ -65,6 +65,8 @@ Variant="$(tr '[:lower:]' '[:upper:]' <<< ${variant:0:1})${variant:1}"
 
 if [[ $build == true ]]; then
 
+    ./gradlew enableMoveApks
+
     if [[ $variant == 'release' ]]; then
         ./gradlew incrementBuild
     fi
