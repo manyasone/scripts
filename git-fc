@@ -21,12 +21,12 @@ if [[ "$#" > 1 ]]; then
 
 	isAnInt='^[0-9]+$'
     if [[ $1 =~ $isAnInt ]]; then
-    	echo $1 is an int.
+    	# echo $1 is an int.
     	startIndex=2;
     	ticketNumber=$1;
     	repetitions=$(($#-2))
     else
-    	echo $1 is not an int.
+    	# echo $1 is not an int.
     	startIndex=1;
     	repetitions=$(($#-1))
     fi
@@ -37,7 +37,7 @@ if [[ "$#" > 1 ]]; then
             pickOnMaster=true
             echo "Will cherry pick on master branch."
         else
-			echo $var
+			# echo $var
 		    apps="$var | $apps"
         fi
 	done
