@@ -24,6 +24,7 @@ openFolder=false
 test=false
 releaseNotes=""
 targetApi="invalid"
+check=false
 
 function writeReleaseNotes() {
 	./gradlew -Pvalue="$releaseNotes" setReleaseNotes
@@ -86,6 +87,10 @@ do
 			test=true
 	        printf "****** Append TEST-Suffix to filename\n";
 	    fi
+		if [[ $var == *"c"* ]]; then
+			check=true
+	        printf "****** Will run tests, checkstyle & findbugs\n";
+	    fi
 	elif echo $var | egrep -q '^[0-9]+$'; then
 		ticket=$var
 		printf "****** Will commit build number changes using ticket #$ticket\n";
@@ -123,7 +128,18 @@ if [[ ${#flavors[@]} -eq 0 ]]; then
 	fi
 
 	exit 1;
+fi
 
+if [[ $upload == true || $check == true ]]; then
+	verified=false;
+	./gradlew testFidionDebugUnittest checkstyle findbugs && verified=true;
+	if [[ $verified == false ]]; then
+		exit 1;
+	fi
+fi
+
+if [[ $build == true && $release == true ]]; then
+	./gradlew incrementVersionCode
 fi
 
 for i in ${!flavors[@]}; do
@@ -246,7 +262,7 @@ for i in ${!flavors[@]}; do
 
 	if [[ $upload == true ]]; then
 		echo Distributing ${Flavor}Release to crashlytics.
-		./gradlew test${Flavor}DebugUnittest checkstyle findbugs crashlyticsUploadDistribution${Flavor}Release
+		./gradlew crashlyticsUploadDistribution${Flavor}Release
 		echo Done.
 	fi
 
