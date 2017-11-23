@@ -25,6 +25,7 @@ test=false
 releaseNotes=""
 targetApi="invalid"
 check=false
+nocheck=false
 
 function writeReleaseNotes() {
 	./gradlew -Pvalue="$releaseNotes" setReleaseNotes
@@ -53,6 +54,9 @@ do
 		if [[ ${var:2} =~ live|beta|admin ]]; then
 			targetApi=${var:2}
 			writeTargetApi ${var:2}
+		elif [[ ${var:2} =~ nocheck ]]; then
+    		printf "****** Won't run any verification\n";
+			nocheck=true
 		fi
 	elif [[ ${var:0:1} == "-" ]]; then
 		if [[ $var == *"b"* ]]; then
@@ -130,7 +134,7 @@ if [[ ${#flavors[@]} -eq 0 ]]; then
 	exit 1;
 fi
 
-if [[ $upload == true || $check == true ]]; then
+if [[ ( $upload == true || $check == true ) && $nocheck == false ]]; then
 	verified=false;
 	./gradlew testFidionDebugUnittest checkstyle findbugs && verified=true;
 	if [[ $verified == false ]]; then
@@ -138,7 +142,7 @@ if [[ $upload == true || $check == true ]]; then
 	fi
 fi
 
-if [[ $build == true && $release == true ]]; then
+if [[ $build == true && $variant == "release" ]]; then
 	./gradlew incrementVersionCode
 fi
 
@@ -261,6 +265,10 @@ for i in ${!flavors[@]}; do
 	fi
 
 	if [[ $upload == true ]]; then
+		if [[ $releaseNotes != "" && $build == false ]]; then
+			writeReleaseNotes
+		fi
+
 		echo Distributing ${Flavor}Release to crashlytics.
 		./gradlew crashlyticsUploadDistribution${Flavor}Release
 		echo Done.
