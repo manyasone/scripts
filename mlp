@@ -1,0 +1,34 @@
+#!/bin/bash
+
+projectdir=$HOME/git/
+destdir=$projectdir/$1
+
+
+echo "*** Create new Backpack project in given directory ***"
+
+cd $projectdir
+git clone git@webfactor.plan.io:webfactor/webfactor.wfm_laravel_backpack.git $1
+cd $destdir
+git checkout master
+
+echo "*** Reset git ***"
+rm -rf .git
+git init
+
+
+echo "*** Create dev Branch and add all files to git ***"
+git checkout -b dev
+git add .
+git commit -m "init project"
+
+echo "*** Run composer install ***"
+composer install
+
+echo "*** Create .env file ***"
+cp .env.example .env
+
+echo "*** Set app key ***"
+php artisan key:generate
+
+echo "*** Set jwt secret ***"
+php artisan jwt:secret
