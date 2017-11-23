@@ -230,7 +230,7 @@ for i in ${!flavors[@]}; do
 
 		if [[ $variant == "release" ]]; then
 			echo Copying ./app/build/outputs/apk/$flavor/release/*.apk to ./app/apk/
-			cp ./app/build/outputs/apk/freeSigned/$flavor/*.apk ./app/apk/
+			cp ./app/build/outputs/apk/$flavor/release/*.apk ./app/apk/
 		fi
 	fi
 
@@ -242,7 +242,6 @@ for i in ${!flavors[@]}; do
 	if [[ $deploy == true ]]; then
 		echo Installing $Flavor $Variant
 		./gradlew install$Flavor$Variant
-
 	fi
 
 	if [[ $upload == true ]]; then
