@@ -1,3 +1,14 @@
 #!/bin/bash
 
-./gradlew clean testFidionDebugUnitTest checkstyle findbugs
+if [[ $1 == "test" ]]
+then
+    ./gradlew clean testFidionDebugUnitTest
+elif [[ $1 == "style" ]]
+then
+    ./gradlew clean checkstyle
+elif [[ $1 == "bugs" ]]
+then
+    ./gradlew clean findbugs
+else
+    ./gradlew clean testFidionDebugUnitTest checkstyle findbugs
+fi
