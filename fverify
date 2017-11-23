@@ -1,3 +1,0 @@
-#!/bin/bash
-
-gradlew --stacktrace clean checkstyle && gradlew --stacktrace testFidionDebug --continue && gradlew --stacktrace assembleFidionDebug findbugs
