@@ -81,20 +81,11 @@ if [[ $build == true ]]; then
 	fi
 
 	if [[ $flavor == "" ]]; then
-		./gradlew assembleFree$Signature$Variant
-
-<<<<<<< HEAD
-    ./gradlew enableMoveApks
-
-    if [[ $variant == 'release' ]]; then
-        ./gradlew incrementBuild
-    fi
-=======
 		./gradlew assemblePaid$Signature$Variant
+		./gradlew assembleFree$Signature$Variant
 	else
 		./gradlew assemble$Flavor$Signature$Variant
 	fi
->>>>>>> 2011d358ab6ba673dc8289d298628baee0404723
 
 	if [[ $variant == "release" && $signature == "signed" ]]; then
 		echo "Will copy apk and mapping files."

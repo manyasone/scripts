@@ -12,6 +12,9 @@ Assuming that you want to place the scripts in a folder named _~/bin_:
 ## List of scripts
 Params in `[]` are optional.
 
+### Laravel:
+- ```laravel-init``` → Initialises cloned laravel project
+
 ### Ionic:
 Note: Execute these scripts in the project's root folder.
 - ```create-apk``` → Create android apk
