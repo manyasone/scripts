@@ -9,8 +9,8 @@ php artisan key:generate;
 directory=${PWD##*/};
 
 mysql -uroot -p -e "CREATE DATABASE $directory"
-sed -i 's|DB_USERNAME=homestead|"DB_USERNAME=root"|g' .env
-sed -i 's|DB_PASSWORD=secret|"DB_PASSWORD="|g' .env
+sed -i 's|DB_USERNAME=homestead|DB_USERNAME=root|g' .env
+sed -i 's|DB_PASSWORD=secret|DB_PASSWORD=|g' .env
 sed -i "s|DB_DATABASE=homestead|DB_DATABASE=$directory|g" .env
 
 # Setup dependency & data related stuff.
