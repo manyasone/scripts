@@ -4,7 +4,6 @@
 
 # Setup .env:
 cp .env.example .env;
-php artisan key:generate;
 
 directory=${PWD##*/};
 
@@ -14,4 +13,4 @@ sed -i 's|DB_PASSWORD=secret|DB_PASSWORD=|g' .env
 sed -i "s|DB_DATABASE=homestead|DB_DATABASE=$directory|g" .env
 
 # Setup dependency & data related stuff.
-composer install && php artisan migrate:fresh && php artisan db:seed && yarn && yarn dev
+composer install && php artisan key:generate && php artisan migrate:fresh && php artisan db:seed && yarn && yarn dev
