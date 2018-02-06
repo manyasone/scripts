@@ -3,7 +3,7 @@
 # This script helps to commit staged changes.
 
 branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
-commitType="refs"
+commitType=""
 message=""
 ticketNumber=""
 
@@ -42,5 +42,9 @@ elif [[ $ticketNumber =~ ^?[0-9]+$ ]]; then
 elif [ -z "$message" ]; then
     echo "No commit message, aborting!";
 else
-    git commit -m "[$commitType #$ticketNumber] $message";
+	prefix="#$ticketNumber";
+	if [[ $commitType != "" ]]; then
+		prefix="[$commitType #$ticketNumber] $message";
+	fi
+    git commit -m "$prefix $message";
 fi
