@@ -19,6 +19,6 @@ if [ "$#" -eq 0 ]; then
 else
 	for var in "$@"
 	do
-	    git checkout dev && git fetch && git pull && git merge origin/ticket/$var && git push;
+	    git checkout dev && git fetch && git pull && git merge origin/ticket/$var --no-ff && git push;
 	done
 fi
