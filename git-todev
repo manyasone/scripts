@@ -14,7 +14,7 @@ if [ "$#" -eq 0 ]; then
     if [ -z "$ticketNumber" ]; then
         echo "No ticket number present, aborting!";
     else
-        git checkout dev && git fetch && git pull && git merge $branch && git push;
+        git checkout dev && git fetch && git pull && git merge $branch --no-ff && git push;
     fi
 else
 	for var in "$@"

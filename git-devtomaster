@@ -2,4 +2,4 @@
 
 # Force push dev branch to origin/master
 
-git push -f origin dev:master;
+git checkout dev && git fetch && git pull && git checkout master && git merge dev --no-ff && git push && git checkout dev;
