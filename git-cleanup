@@ -7,8 +7,8 @@
 # Its remote sibling will be deleted, if it does not fit the excluded pattern.
 
 # Set excluded branches
-current=$(git rev-parse --abbrev-ref HEAD)
-excludedBranches="(^*|$current|master|slave|dev|alpha|beta|release)"
+currentBranch=$(git rev-parse --abbrev-ref HEAD)
+excludedBranches="(^*|$currentBranch|master|slave|dev|alpha|beta|release)"
 
 # Get local and remote branches, that do not fit the patterns
 mergedLocals=$(git branch --merged | egrep -v $excludedBranches);
