@@ -9,7 +9,7 @@ echo "*** Create new Backpack project in given directory ***"
 cd $projectdir
 git clone git@webfactor.plan.io:webfactor/webfactor.wfm_laravel_backpack.git $1
 cd $destdir
-git checkout master
+git checkout ${2:-master}
 
 echo "*** Reset git ***"
 rm -rf .git
