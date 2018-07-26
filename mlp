@@ -2,7 +2,7 @@
 
 projectdir=$HOME/git/
 destdir=$projectdir/$1
-
+branch=${2:-master}
 
 echo "*** Create new Backpack project in given directory ***"
 
