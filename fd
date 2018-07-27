@@ -161,20 +161,11 @@ for i in ${!flavors[@]}; do
 	fidion_kathrin)
 		appId="de.fcms.webapp.kathrin.testapp"
 		;;
-	luzern)
-		appId="de.fcms.webapp.luzernerzeitung"
-		;;
-	sk_epaper)
-		appId="com.sk.de"
-		;;
 	oon)
 		appId="de.fcms.webapp.oon"
 		;;
 	bote)
 		appId="com.soxes.bote"
-		;;
-	fnp)
-		appId="de.fcms.webapp.fnp"
 		;;
 	frankenpost)
 		appId="de.fcms.webapp.fp"
@@ -188,23 +179,11 @@ for i in ${!flavors[@]}; do
 	np)
 		appId="de.fcms.webapp.np"
 		;;
-	heidenheim)
-		appId="de.fcms.webapp.hz"
-		;;
-	tagblatt)
-		appId="de.fcms.webapp.tagblatt"
-		;;
-	volksfreund)
-		appId="de.fcms.webapp.volksfreund"
-		;;
 	ka_news)
 		appId="de.fcms.webapp.ka.news"
 		;;
 	sk_news)
 		appId="de.fcms.webapp.sk_news"
-		;;
-	filmtage)
-		appId="de.fcms.webapp.filmtage"
 		;;
 	mp_news)
 		appId="de.fcms.webapp.mp.news"
