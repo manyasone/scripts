@@ -10,7 +10,7 @@ ticketNumber=""
 # Get ticketNumber by removing 'ticket/' from the branch's name,
 # if branch name begins with "ticket/"
 if [[ ${branch:0:7} == "ticket/" ]]; then
-	ticketNumber=${branch:7};
+	ticketNumber=${branch//[!0-9]/};
 fi
 
 # If three params are passed:
