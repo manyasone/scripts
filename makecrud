@@ -1,0 +1,7 @@
+#!/bin/bash
+if [[ -n $1 ]]; then
+   	singular=${1^}
+	php artisan make:model Models\\$singular -m && php artisan make:factory $nameFactory rm ./app/Models/$singular.php && php artisan backpack:crud $singular && php artisan make:seeder $singular"sTableSeeder"
+else
+	echo "Please pass a model name."
+fi
