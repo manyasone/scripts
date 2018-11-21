@@ -4,4 +4,4 @@
 # If ticket number is parsed as param, try to merge ticket/$1 to slave
 # If no param is passed, try to merge current branch.
 
-git checkout dev && git fetch && git pull && git checkout slave && git pull && git merge dev --no-ff && git push && git checkout dev;
+git checkout dev && git fetch && git pull && git checkout slave && git pull && git merge dev --no-ff --no-edit && git push && git checkout dev;

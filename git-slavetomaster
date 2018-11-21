@@ -2,4 +2,4 @@
 
 # Push slave branch to origin/master
 
-git checkout slave && git fetch && git pull && git checkout master && git pull && git merge slave --no-ff && git push && git checkout dev;
+git checkout slave && git fetch && git pull && git checkout master && git pull && git merge slave --no-ff --no-edit && git push && git checkout dev;
