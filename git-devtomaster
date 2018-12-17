@@ -1,5 +1,7 @@
 #!/bin/bash
 
-# Force push dev branch to origin/master
+# Merge branch to slave branch and delete it afterwards
+# If ticket number is parsed as param, try to merge ticket/$1 to master
+# If no param is passed, try to merge current branch.
 
-git checkout dev && git fetch && git pull && git checkout master && git merge dev --no-ff && git push && git checkout dev;
+git checkout dev && git fetch && git pull && git checkout master && git pull && git merge dev --no-ff --no-edit && git push && git checkout dev;
