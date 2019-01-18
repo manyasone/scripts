@@ -1,0 +1,82 @@
+#!/bin/bash
+
+# Possible params:
+# '--staging' (for test-server; set by default)
+# '--prod', or '--production' (for live-server)
+# Any $key that is available in forge_data.json
+
+BASEDIR=$(dirname "$0")
+environment=staging
+key=null
+
+for var in "$@"
+do
+    echo "Param: $var"
+
+    if [[ $var == "--list" ]]; then
+        data=$(cat $BASEDIR/forge_data.json | jq .)
+        echo "Available data for deployment:"
+        echo $data | jq .
+        exit 0;
+    elif [[ $var == "--keys" ]]; then
+        data=$(cat $BASEDIR/forge_data.json | jq .)
+        echo "Available data for deployment:"
+        echo $data | jq 'keys'
+        exit 0;
+    elif [[ $var == "--prod"* ]]; then
+        environment=production
+        echo "Environment set to $environment"
+    elif [[ $var == "--staging" ]]; then
+        environment=staging
+        echo "Environment set to $environment"
+    else
+        key=$var
+        echo "Key set to $key"
+    fi
+done
+
+if [[ $key == null ]]; then
+    key=$(cat forge_data.json | jq '.key')
+fi
+
+if [[ $key == null ]]; then
+    echo -e "\e[91m***** Cannot find project key. Please pass it either as a param, or store it in the project directory, in forge_data.json: {"key": "{PROJECT KEY}"}"
+    exit 0;
+fi
+
+path=$key.$environment
+
+data=$(cat $BASEDIR/forge_data.json | jq ".$key")
+
+if [[ $data == null ]]; then
+    echo -e "\e[91mCannot find data for key \e[1m$key\e[21m."
+    exit 0
+fi
+
+echo "Data found:"
+echo $data | jq .
+echo
+
+server_id=$(echo $data | jq ".$environment.server_id")
+site_id=$(echo $data | jq ".$environment.site_id")
+root=$(echo $data | jq ".$environment.root")
+
+if [[ $server_id == null ]]; then
+    echo -e "\e[91mCannot find $environment server-id for key \e[1m$key\e[21m."
+    exit 0
+fi
+
+if [[ $project_id == null ]]; then
+    echo -e "\e[91mCannot find $environment site-id for key \e[1m$key\e[21m."
+    exit 0
+fi
+
+echo -e "\e[33m***** Deploy $root now ($environment)? [Y, n]"
+read -rsn1 response
+if [ "$response" == "y" ]; then
+    forge deploy:site $server_id $site_id
+    echo "Deploying... *****"
+else
+    echo "Aborted. *****"
+    exit 1
+fi

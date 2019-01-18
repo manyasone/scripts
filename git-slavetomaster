@@ -2,4 +2,13 @@
 
 # Push slave branch to origin/master
 
+# Deployment params:
+# '--deploy' -> Will trigger deployment on live server
+
+BASEDIR=$(dirname "$0")
+
 git checkout slave && git fetch && git pull && git checkout master && git pull && git merge slave --no-ff --no-edit && git push && git checkout dev;
+
+if [[ $deploy == true ]]; then
+	$BASEDIR/wfdeploy --live
+fi
