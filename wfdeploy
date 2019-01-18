@@ -5,7 +5,7 @@
 # '--prod', or '--production' (for live-server)
 # Any $key that is available in forge_data.json
 
-BASEDIR=$(dirname "$0")
+BASEDIR="$HOME"
 environment=staging
 key=null
 
@@ -48,7 +48,7 @@ path=$key.$environment
 
 data=$(cat $BASEDIR/forge_data.json | jq ".$key")
 
-if [[ $data == null ]]; then
+if [[ $data == null || $data == "" ]]; then
     echo -e "\e[91mCannot find data for key \e[1m$key\e[21m."
     exit 0
 fi
@@ -61,12 +61,12 @@ server_id=$(echo $data | jq ".$environment.server_id")
 site_id=$(echo $data | jq ".$environment.site_id")
 root=$(echo $data | jq ".$environment.root")
 
-if [[ $server_id == null ]]; then
+if [[ $server_id == null || $server_id == "" ]]; then
     echo -e "\e[91mCannot find $environment server-id for key \e[1m$key\e[21m."
     exit 0
 fi
 
-if [[ $project_id == null ]]; then
+if [[ $project_id == null || $project_id == "" ]]; then
     echo -e "\e[91mCannot find $environment site-id for key \e[1m$key\e[21m."
     exit 0
 fi
