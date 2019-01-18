@@ -5,15 +5,16 @@
 # Setup .env:
 cp .env.example .env;
 
-directory=${PWD##*/};
+directory=${PWD##*/} ;
+database=${directory//[-. ]/_}
 
-mysql -uroot -p -e "CREATE DATABASE $directory"
+mysql -uroot -p -e "CREATE DATABASE $database"
 sed -i 's|DB_USERNAME=homestead|DB_USERNAME=root|g' .env
 sed -i 's|DB_PASSWORD=secret|DB_PASSWORD=|g' .env
-sed -i "s|DB_DATABASE=database|DB_DATABASE=$directory|g" .env
-sed -i "s|DB_DATABASE=webfactor|DB_DATABASE=$directory|g" .env
-sed -i "s|DB_DATABASE=homestead|DB_DATABASE=$directory|g" .env
-sed -i "s|APP_URL=http://localhost|APP_URL=http://$directory.test\nAPP_DOMAIN=$directory.test|g" .env
+sed -i "s|DB_DATABASE=database|DB_DATABASE=$database|g" .env
+sed -i "s|DB_DATABASE=webfactor|DB_DATABASE=$database|g" .env
+sed -i "s|DB_DATABASE=homestead|DB_DATABASE=$database|g" .env
+sed -i "s|APP_URL=https://localhost|APP_URL=https://$directory.test\nAPP_DOMAIN=$directory.test|g" .env
 
 # Setup dependency & data related stuff.
-composer install && php artisan key:generate && php artisan migrate:fresh && php artisan db:seed && yarn && yarn dev
+composer install && php artisan key:generate && php artisan migrate:fresh && php artisan db:seed && yarn && yarn dev && valet secure
