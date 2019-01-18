@@ -57,21 +57,21 @@ echo "Data found:"
 echo $data | jq .
 echo
 
-server_id=$(echo $data | jq ".$environment.server_id")
-site_id=$(echo $data | jq ".$environment.site_id")
-root=$(echo $data | jq ".$environment.root")
+server_id=$(echo $data | jq .$environment.server_id)
+site_id=$(echo $data | jq .$environment.site_id)
+root=https://$(echo $data | jq .$environment.root | tr -d '"')
 
 if [[ $server_id == null || $server_id == "" ]]; then
     echo -e "\e[91mCannot find $environment server-id for key \e[1m$key\e[21m."
     exit 0
 fi
 
-if [[ $project_id == null || $project_id == "" ]]; then
+if [[ $site_id == null || $site_id == "" ]]; then
     echo -e "\e[91mCannot find $environment site-id for key \e[1m$key\e[21m."
     exit 0
 fi
 
-echo -e "\e[33m***** Deploy $root now ($environment)? [Y, n]"
+echo -e "\e[33m***** Start \e[34m\e[1m$environment\e[34m\e[21m\e[33m-deployment on \e[34m$root\e[33m now? [Y, n]"
 read -rsn1 response
 if [ "$response" == "y" ]; then
     forge deploy:site $server_id $site_id
