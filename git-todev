@@ -7,18 +7,40 @@
 # Set excluded branches
 excludedBranches="(^\*|master|slave|dev|alpha|beta|release)"
 
+echo -e "\e[33m***** Show tickets planio? [Y, n] \e[39m"
+read -rsn1 response
+
 if [ "$#" -eq 0 ]; then
     branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
     ticketNumber=${branch:7};
 
     if [ -z "$ticketNumber" ]; then
-        echo "No ticket number present, aborting!";
-    else
-        git checkout dev && git fetch && git pull && git merge $branch --no-ff --no-edit && git push;
+        echo "\e[31mNo ticket number present, aborting!\e[39m";
+        exit 1
+    fi
+
+    git checkout dev && git fetch && git pull && git merge $branch --no-ff --no-edit && git push;
+	if [ "$response" == "y" ]; then
+		planio "$var"
     fi
 else
 	for var in "$@"
 	do
 	    git checkout dev && git fetch && git pull && git merge origin/ticket/$var --no-ff --no-edit && git push;
+		if [ "$response" == "y" ]; then
+			planio "$var"
+		fi
 	done
+fi
+
+echo -e "\e[33m***** Cleanup merged tickets now? [Y, n] \e[39m"
+read -rsn1 cleanup
+if [[ $cleanup ]]; then
+	git cleanup
+fi
+
+echo -e "\e[33m***** Merge to slave now? [Y, n] \e[39m"
+read -rsn1 slave
+if [[ $slave ]]; then
+	git devtoslave
 fi

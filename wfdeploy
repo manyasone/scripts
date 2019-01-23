@@ -77,18 +77,16 @@ if [ "$response" == "y" ]; then
     forge deploy:site $server_id $site_id
     echo "Deploying... *****"
     echo -e "\e[33m***** Open forge page in browser? [Y, n]"
-	read -rsn1 response
-	if [ "$response" == "y" ]; then
-		if [[ "$OSTYPE" == "linux-gnu" ]]; then
-			xdg-open https://forge.laravel.com/servers/$server_id/sites/$site_id#/application &!
-			disown
-		else
-			open https://forge.laravel.com/servers/$server_id/sites/$site_id#/application &!
-			disown
-		fi
-		exit 1
+	read -rsn1 openForge
+	if [ "$openForge" == "y" ]; then
+		opn "https://forge.laravel.com/servers/$server_id/sites/$site_id#/application"
+	fi
+
+    echo -e "\e[33m***** Open project page in browser? [Y, n]"
+	read -rsn1 openProject
+	if [ "$openProject" == "y" ]; then
+		opn "$root"
 	fi
 else
     echo "Aborted. *****"
-    exit 1
 fi

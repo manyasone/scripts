@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ "$#" -eq 0 ]; then
+        echo "No data passed, aborting!";
+        exit 1;
+fi
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+	xdg-open $1 &!
+	disown
+else
+	open $1 &!
+disown
+fi

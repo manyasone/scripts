@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ "$#" -eq 0 ]; then
+    branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
+    ticketNumber=${branch:7};
+
+    if [ -z "$ticketNumber" ]; then
+        echo "No ticket number present, aborting!";
+        exit 1;
+    fi
+else
+	ticketNumber=$1
+fi
+
+	url=https://webfactor.plan.io/issues/$ticketNumber
+	if [[ "$OSTYPE" == "linux-gnu" ]]; then
+		xdg-open $url &!
+		disown
+	else
+		open $url &!
+	disown
+fi
