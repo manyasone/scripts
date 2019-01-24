@@ -35,12 +35,12 @@ fi
 
 echo -e "\e[33m***** Cleanup merged tickets now? [Y, n] \e[39m"
 read -rsn1 cleanup
-if [[ $cleanup ]]; then
+if [[ $cleanup == "y" ]]; then
 	git cleanup
 fi
 
 echo -e "\e[33m***** Merge to slave now? [Y, n] \e[39m"
 read -rsn1 slave
-if [[ $slave ]]; then
+if [[ $slave == "y" ]]; then
 	git devtoslave
 fi

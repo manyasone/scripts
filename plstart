@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Checkout dev branch, fetch & pull, create new branch in ticket/#1
+ticketNumber=""
+if [ "$#" -eq 0 ]; then
+	if [ -d .git ]; then
+    	branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
+    	ticketNumber="issues/${branch:7}/"
+	fi
+else
+    ticketNumber="issues/$1/"
+fi
+
+echo -e "\e[33m***** Stop tracking in planio? [Y, n]"
+read -rsn1 stop
+if [ "$stop" == "y" ]; then
+    opn https://webfactor.plan.io/stop_timer
+fi
+
+echo -e "\e[33m***** Start tracking in planio? [Y, n]"
+read -rsn1 track
+if [ "$track" == "y" ]; then
+    opn "https://webfactor.plan.io/"$ticketNumber"start_timer"
+fi

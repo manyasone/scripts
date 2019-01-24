@@ -7,3 +7,15 @@
 git fetch;
 echo ticket/$1;
 git checkout ticket/$1;
+
+echo -e "\e[33m***** Stop tracking in planio? [Y, n]"
+read -rsn1 stop
+if [ "$stop" == "y" ]; then
+    opn https://webfactor.plan.io/stop_timer
+fi
+
+echo -e "\e[33m***** Start tracking in planio? [Y, n]"
+read -rsn1 track
+if [ "$track" == "y" ]; then
+    opn https://webfactor.plan.io/issues/$1/start_timer
+fi

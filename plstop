@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo -e "\e[33m***** Stop tracking in planio? [Y, n]"
+read -rsn1 stop
+if [ "$stop" == "y" ]; then
+    opn https://webfactor.plan.io/stop_timer
+fi

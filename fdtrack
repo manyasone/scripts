@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo -e "\e[33m***** Start tracking fidion ticket in planio? [Y, n]"
+read -rsn1 start
+if [ "$start" == "y" ]; then
+    opn https://webfactor.plan.io/stop_timer
+	opn https://webfactor.plan.io/issues/10843/start_timer
+fi
