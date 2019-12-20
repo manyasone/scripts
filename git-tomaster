@@ -7,11 +7,15 @@
 # Set excluded branches
 excludedBranches="(^\*|master|slave|dev|alpha|beta|release)"
 edit="--no-edit"
+ff="--no-ff"
 
 for var in "$@"
 do
 	shift
-	if [[ $var == "--edit" ]]; then
+	if [[ $var == "--ff" ]]; then
+		ff=''
+		echo "Will merge with fast forward."
+	elif [[ $var == "--edit" ]]; then
 		edit=''
 		echo "Will show edit merge dialog."
 	else
@@ -26,11 +30,11 @@ if [ "$#" -eq 0 ]; then
     if [ -z "$ticketNumber" ]; then
         echo "No ticket number present, aborting!";
     else
-        git checkout master && git fetch && git pull && git merge $branch --no-ff $edit && git push;
+        git checkout master && git fetch && git pull && git merge $branch $ff $edit;
     fi
 else
 	for var in "$@"
 	do
-	    git checkout master && git fetch && git pull && git merge origin/ticket/$var --no-ff $edit && git push;
+	    git checkout master && git fetch && git pull && git merge origin/ticket/$var $ff $edit;
 	done
 fi

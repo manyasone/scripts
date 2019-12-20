@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ "$#" -eq 0 ]; then
+    branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
+    ticketNumber=${branch:7};
+
+    if [ -z "$ticketNumber" ]; then
+		url=https://redmine.fidion.de/issues?query_id=22
+    else
+		url=https://redmine.fidion.de/issues/$ticketNumber
+    fi
+
+else
+	ticketNumber=$1
+	url=https://redmine.fidion.de/issues/$ticketNumber
+fi
+
+	if [[ "$OSTYPE" == "linux-gnu" ]]; then
+		xdg-open $url &!
+		disown
+	else
+		open $url &!
+	disown
+fi

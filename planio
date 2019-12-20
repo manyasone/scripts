@@ -5,14 +5,24 @@ if [ "$#" -eq 0 ]; then
     ticketNumber=${branch:7};
 
     if [ -z "$ticketNumber" ]; then
-        echo "No ticket number present, aborting!";
-        exit 1;
+		BASEDIR="$HOME"
+
+		data=$(cat $BASEDIR/forge_data.json | jq .$key)
+    	key=$(cat forge_data.json | jq '.key')
+		planio=$(echo $data | jq .$key.planio | tr -d '"')
+		if [[ $planio == null ]]; then
+			planio=$key
+		fi
+		url=https://webfactor.plan.io/projects/$planio/issues?query_id=168
+    else
+		url=https://webfactor.plan.io/issues/$ticketNumber
     fi
+
 else
 	ticketNumber=$1
+	url=https://webfactor.plan.io/issues/$ticketNumber
 fi
 
-	url=https://webfactor.plan.io/issues/$ticketNumber
 	if [[ "$OSTYPE" == "linux-gnu" ]]; then
 		xdg-open $url &!
 		disown

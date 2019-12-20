@@ -2,11 +2,11 @@
 
 prompt()
 {
-	echo "Discard all uncommited file changes? (y/n)"
+	echo "Discard all unstaged file changes? (y/n)"
 	read -rsn1 response
 	if [ "$response" == "y" ]; then
 		git checkout -- .
-		echo "Discarded all changes."
+		echo "Discarded all unstaged changes."
 	elif [ "$response" == "n" ]; then
 		echo "Aborted."
 		exit 1

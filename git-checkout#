@@ -6,7 +6,19 @@
 
 git fetch;
 echo ticket/$1;
-git checkout ticket/$1;
+
+[ ${#} -ne 1 ] && { echo -e "Please provide one search string" ; exit 1 ; }
+MATCHES=( $(git branch -a --color=never | sed -r 's|^[* ] (remotes/origin/)?||' | sort -u | grep -E "^((ticket|release)/)?([A-Z]+-[1-9][0-9]*-)?${1}") )
+case ${#MATCHES[@]} in
+  ( 0 ) echo "No branches matched '${1}'" ; exit 1  ;;
+  ( 1 ) git checkout "${MATCHES[0]}"      ; exit $? ;;
+esac
+echo "Ambiguous search '${1}'; returned ${#MATCHES[@]} matches:"
+
+for ITEM in "${MATCHES[@]}" ; do
+  echo -e "  ${ITEM}"
+done
+exit 1
 
 echo -e "\e[33m***** Stop tracking in planio? [Y, n]"
 read -rsn1 stop
@@ -19,3 +31,4 @@ read -rsn1 track
 if [ "$track" == "y" ]; then
     opn https://webfactor.plan.io/issues/$1/start_timer
 fi
+

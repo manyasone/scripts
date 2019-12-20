@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Merge branch to slave branch and delete it afterwards
+# If ticket number is parsed as param, try to merge ticket/$1 to slave
+# If no param is passed, try to merge current branch.
+
+# Deployment params:
+# '--deploy' -> Will trigger deployment on test server
+
+BASEDIR=$(dirname "$0")
+
+deploy=false
+
+for var in "$@"
+do
+    if [[ $var == "--live"* ]]; then
+        environment=production
+    elif [[ $var == "--deploy"* ]]; then
+        deploy=true
+    fi
+done
+
+git checkout dev && git fetch && git pull && git checkout alpha && git pull && git merge dev --no-ff --no-edit && git push && git checkout dev;
+
+if [[ $deploy == true ]]; then
+	$BASEDIR/wfdeploy
+fi
+

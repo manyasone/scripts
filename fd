@@ -26,6 +26,9 @@ releaseNotes=""
 targetApi="invalid"
 check=false
 nocheck=false
+bundle=false
+uploadBundle=false
+incVersion=false
 
 function writeReleaseNotes() {
 	./gradlew -Pvalue="$releaseNotes" setReleaseNotes
@@ -57,6 +60,15 @@ do
 		elif [[ ${var:2} =~ nocheck ]]; then
     		printf "****** Won't run any verification\n";
 			nocheck=true
+		elif [[ ${var:2} =~ bundle ]]; then
+    		printf "****** Will create AAB\n";
+			bundle=true
+		elif [[ ${var:2} =~ upload ]]; then
+    		printf "****** Will upload AAB\n";
+			uploadBundle=true
+		elif [[ ${var:2} =~ v+ ]]; then
+    		printf "****** Will increment version code\n";
+			incVersion=true
 		fi
 	elif [[ ${var:0:1} == "-" ]]; then
 		if [[ $var == *"b"* ]]; then
@@ -77,7 +89,7 @@ do
 	    fi
 		if [[ $var == *"u"* ]]; then
 	    	upload=true;
-			printf "****** Upload to crashlytics\n";
+			printf "****** Upload to firebase app distribution\n";
 		fi
 		if [[ $var == *"v"* ]]; then
 	    	git checkout -- app/config/versioncode/versioncode.properties
@@ -93,7 +105,7 @@ do
 	    fi
 		if [[ $var == *"c"* ]]; then
 			check=true
-	        printf "****** Will run tests, checkstyle & findbugs\n";
+	        printf "****** Will run tests, checkstyle & spotbugs\n";
 	    fi
 	elif echo $var | egrep -q '^[0-9]+$'; then
 		ticket=$var
@@ -134,15 +146,7 @@ if [[ ${#flavors[@]} -eq 0 ]]; then
 	exit 1;
 fi
 
-if [[ ( $upload == true || $check == true ) && $nocheck == false ]]; then
-	verified=false;
-	./gradlew testFidionDebugUnittest checkstyle findbugs && verified=true;
-	if [[ $verified == false ]]; then
-		exit 1;
-	fi
-fi
-
-if [[ $build == true && $variant == "release" ]]; then
+if [[ $build == true && $variant == "release" || $incVersion == true ]]; then
 	./gradlew incrementVersionCode
 fi
 
@@ -197,6 +201,9 @@ for i in ${!flavors[@]}; do
 	me_epaper)
 		appId="de.fcms.webapp.mainecho"
 		;;
+	me_news)
+		appId="de.main_netz.ME_News"
+		;;
 	gaz)
 		appId="de.fcms.webapp.mdv.gaz"
 		;;
@@ -211,7 +218,15 @@ for i in ${!flavors[@]}; do
 	Flavor="$(tr '[:lower:]' '[:upper:]' <<< ${flavor:0:1})${flavor:1}"
 	Variant="$(tr '[:lower:]' '[:upper:]' <<< ${variant:0:1})${variant:1}"
 
-	if [[ $build == true ]]; then
+	if [[ ( $upload == true || $check == true ) && $nocheck == false ]]; then
+		verified=false;
+		./gradlew test${Flavor}${Variant}Unittest checkstyle check${Flavor}${Variant}DuplicateClasses && verified=true;
+		if [[ $verified == false ]]; then
+			exit 1;
+		fi
+	fi
+
+	if [[ $build == true || $bundle == true ]]; then
 
 		if [[ $targetApi == "invalid" ]]; then
 			writeTargetApi "live"
@@ -223,16 +238,18 @@ for i in ${!flavors[@]}; do
 			writeTicket ""
 		fi
 
-		if [[ $variant == "release" ]]; then
+		if [[ $variant == "release" || $bundle == true ]]; then
 			writeFlavor $flavor
 			writeReleaseNotes
 		fi
 
-		./gradlew --project-prop appId=$appId clean assemble$Flavor$Variant
+		if [[ $build == true ]]; then
+			./gradlew --project-prop appId=$appId clean assemble$Flavor$Variant
 
-		if [[ $variant == "release" ]]; then
-			echo Copying ./app/build/outputs/apk/$flavor/release/*.apk to ./app/apk/
-			cp ./app/build/outputs/apk/$flavor/release/*.apk ./app/apk/
+			if [[ $variant == "release" ]]; then
+				echo Copying ./app/build/outputs/apk/$flavor/release/*.apk to ./app/apk/
+				cp ./app/build/outputs/apk/$flavor/release/*.apk ./app/apk/
+			fi
 		fi
 	fi
 
@@ -251,9 +268,24 @@ for i in ${!flavors[@]}; do
 			writeReleaseNotes
 		fi
 
-		echo Distributing ${Flavor}Release to crashlytics.
-		./gradlew crashlyticsUploadDistribution${Flavor}Release
+		echo Distributing ${Flavor}Release to firebase app distribution.
+		./gradlew appDistributionUpload${Flavor}Release
 		echo Done.
+	fi
+
+	if [[ $bundle == true ]]; then
+
+		echo Creating ${Flavor}Release AAB.
+		./gradlew bundle${Flavor}Release
+
+		echo Copying ./app/build/outputs/apk/$flavor/release/*.apk to ./app/apk/
+		if [[ $uploadBundle == true ]]; then
+			mkdir -p /home/simon/Dropbox/fidion/${flavor};
+			cp ./app/build/outputs/bundle/${flavor}Release/*.aab /home/simon/Dropbox/fidion/${flavor}
+		fi
+		mv ./app/build/outputs/bundle/${flavor}Release/*.aab ./app/apk/
+		echo Done.
+
 	fi
 
 done

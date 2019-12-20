@@ -8,7 +8,7 @@ then
     ./gradlew clean checkstyle
 elif [[ $1 == "bugs" ]]
 then
-    ./gradlew clean findbugs
+    ./gradlew clean check
 else
-    ./gradlew clean testFidionDebugUnitTest checkstyle findbugs
+    ./gradlew clean testFidionDebugUnitTest checkstyle check
 fi

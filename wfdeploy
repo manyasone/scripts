@@ -1,12 +1,14 @@
 #!/bin/bash
 
 # Possible params:
-# '--staging' (for test-server; set by default)
+# '--alpha' (for alpha server; set by default)
+# '--beta' (for beta (devactor) server; set by default)
 # '--prod', or '--production' (for live-server)
 # Any $key that is available in forge_data.json
 
 BASEDIR="$HOME"
-environment=staging
+environment=alpha
+ssh=false
 key=null
 
 for var in "$@"
@@ -26,9 +28,11 @@ do
     elif [[ $var == "--prod"* ]]; then
         environment=production
         echo "Environment set to $environment"
-    elif [[ $var == "--staging" ]]; then
-        environment=staging
+    elif [[ $var == "--alpha" ]]; then
+        environment=alpha
         echo "Environment set to $environment"
+    elif [[ $var == "--ssh" ]]; then
+    	ssh=true
     else
         key=$var
         echo "Key set to $key"
@@ -58,6 +62,8 @@ echo $data | jq .
 echo
 
 server_id=$(echo $data | jq .$environment.server_id)
+server_ip=$(echo $data | jq .$environment.server_ip)
+server_name=$(echo $data | jq .$environment.server_name)
 site_id=$(echo $data | jq .$environment.site_id)
 root=https://$(echo $data | jq .$environment.root | tr -d '"')
 
@@ -71,7 +77,7 @@ if [[ $site_id == null || $site_id == "" ]]; then
     exit 0
 fi
 
-echo -e "\e[33m***** Start \e[34m\e[1m$environment\e[34m\e[21m\e[33m-deployment on \e[34m$root\e[33m now? [Y, n]"
+echo -e "\e[33m***** Start \e[1m$environment\e[33m deployment on\e[34m $root\e[33m now? [Y, n]"
 read -rsn1 response
 if [ "$response" == "y" ]; then
     forge deploy:site $server_id $site_id
@@ -89,4 +95,12 @@ if [ "$response" == "y" ]; then
 	fi
 else
     echo "Aborted. *****"
+fi
+
+if [ "$ssh" == true ]; then
+    echo -e "\e[33m***** SSH onto server ($server_name)? [Y, n]"
+	read -rsn1 ssh
+	if [ "$ssh" == "y" ]; then
+		ssh "forge@$server_ip"
+	fi
 fi
