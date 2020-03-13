@@ -1,5 +1,7 @@
 #!/bin/bash
 
+integerRegex='^[0-9]+$';
+
 if [ "$#" -eq 0 ]; then
     branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
     ticketNumber=${branch:7};
@@ -13,14 +15,22 @@ if [ "$#" -eq 0 ]; then
 		if [[ $planio == null ]]; then
 			planio=$key
 		fi
-		url=https://webfactor.plan.io/projects/$planio/issues?query_id=168
+		url=https://webfactor.plan.io/projects/$planio/issues?query_id=1pl 25
     else
 		url=https://webfactor.plan.io/issues/$ticketNumber
     fi
 
 else
+if [[ $1 =~ $integerRegex ]] ; then
 	ticketNumber=$1
 	url=https://webfactor.plan.io/issues/$ticketNumber
+else
+	projectName=$1
+	if [[ $projectName == 'mta' ]] ; then
+		projectName='mehr-tanken';
+	fi
+	url=https://webfactor.plan.io/projects/$projectName/issues?query_id=125
+fi
 fi
 
 	if [[ "$OSTYPE" == "linux-gnu" ]]; then

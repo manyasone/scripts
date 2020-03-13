@@ -2,7 +2,7 @@
 
 # Possible params:
 # '--alpha' (for alpha server; set by default)
-# '--beta' (for beta (devactor) server; set by default)
+# '--beta' (for beta (devactor) server)
 # '--prod', or '--production' (for live-server)
 # Any $key that is available in forge_data.json
 
@@ -27,6 +27,9 @@ do
         exit 0;
     elif [[ $var == "--prod"* ]]; then
         environment=production
+        echo "Environment set to $environment"
+    elif [[ $var == "--alpha" ]]; then
+        environment=alpha
         echo "Environment set to $environment"
     elif [[ $var == "--alpha" ]]; then
         environment=alpha
