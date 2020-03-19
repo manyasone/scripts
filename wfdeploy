@@ -28,8 +28,8 @@ do
     elif [[ $var == "--prod"* ]]; then
         environment=production
         echo "Environment set to $environment"
-    elif [[ $var == "--alpha" ]]; then
-        environment=alpha
+    elif [[ $var == "--beta" ]]; then
+        environment=beta
         echo "Environment set to $environment"
     elif [[ $var == "--alpha" ]]; then
         environment=alpha
