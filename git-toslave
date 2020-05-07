@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Merge branch to slave branch locally and on origin
+# If ticket number is parsed as param, try to merge ticket/$1 to slave
+# If no param is passed, try to merge current branch.
+
+for var in "$@"
+do
+	shift
+	if [[ $var == "--ff" ]]; then
+		ff=''
+		echo "Will merge with fast forward."
+	elif [[ $var == "--edit" ]]; then
+		edit=''
+		echo "Will show edit merge dialog."
+	else
+		set -- "$@" "$var"
+	fi
+done
+
+if [ "$#" -eq 0 ]; then
+    branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
+    ticketNumber=${branch:7};
+
+    if [ -z "$ticketNumber" ]; then
+        echo "No ticket number present, aborting!";
+    else
+        git checkout slave && git fetch && git pull && git merge $branch $ff $edit;
+    fi
+else
+	for var in "$@"
+	do
+	    git checkout slave && git fetch && git pull && git merge origin/ticket/$var $ff $edit;
+	done
+fi

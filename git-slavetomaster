@@ -7,7 +7,7 @@
 
 BASEDIR=$(dirname "$0")
 
-git checkout slave && git fetch && git pull && git checkout master && git pull && git merge slave --no-ff --no-edit && git push && git checkout dev;
+git checkout slave && git fetch && git pull && git checkout master && git pull && git merge slave --no-ff --no-edit && git push && git checkout slave;
 
 if [[ $deploy == true ]]; then
 	$BASEDIR/wfdeploy --live

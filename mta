@@ -14,7 +14,7 @@
 #		u -> Unsigned build (`signed` is default for variant `release`, while `unsigned` is default for variant `debug`)
 #
 
-flavor=""
+flavor=free
 build=false
 variant="debug"
 deploy=false
@@ -91,15 +91,15 @@ if [[ $build == true ]]; then
 		echo "Will copy apk and mapping files."
 		if [[ $flavor == "" || $flavor == "paid" ]]; then
 			echo Copying ./app/build/outputs/apk/paidSigned/release/*.apk to ./app/apk/release
-			cp ./app/build/outputs/apk/paidSigned/release/*.apk ./app/apk/release
+			cp ./app/build/outputs/apk/paidSigned/release/*.apk ./app/apk/release/
 			echo Copying ./app/build/outputs/apk/paidSigned/release/*.mapping to ./app/apk/release
-			cp ./app/build/outputs/apk/paidSigned/release/*.mapping ./app/apk/release
+			cp ./app/build/outputs/apk/paidSigned/release/*.mapping ./app/apk/release/
 		fi
 		if [[ $flavor == "" || $flavor == "free" ]]; then
 			echo Copying ./app/build/outputs/apk/freeSigned/release/*.apk to ./app/apk/release
-			cp ./app/build/outputs/apk/freeSigned/release/*.apk ./app/apk/release
+			cp ./app/build/outputs/apk/freeSigned/release/*.apk ./app/apk/release/
 			echo Copying ./app/build/outputs/apk/freeSigned/release/*.mapping to ./app/apk/release
-			cp ./app/build/outputs/apk/freeSigned/release/*.mapping ./app/apk/release
+			cp ./app/build/outputs/apk/freeSigned/release/*.mapping ./app/apk/release/
 		fi
 	else
 		echo "Will not copy apk and mapping files."

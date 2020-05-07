@@ -20,7 +20,7 @@ do
     fi
 done
 
-git checkout alpha && git fetch && git pull && git checkout slave && git pull && git merge alpha --no-ff --no-edit && git push && git checkout dev;
+git checkout alpha && git fetch && git pull && git checkout slave && git pull && git merge alpha --no-ff --no-edit && git push && git checkout alpha;
 
 if [[ $deploy == true ]]; then
 	$BASEDIR/wfdeploy

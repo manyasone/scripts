@@ -4,37 +4,32 @@
 # If ticket number is parsed as param, try to merge ticket/$1 to dev
 # If no param is passed, try to merge current branch.
 
-# Set excluded branches
-excludedBranches="(^\*|master|slave|dev|alpha|beta|release)"
+((!$#)) && echo No sprint name provided, command ignored! && exit 1
 
 echo -e "\e[33m***** Show tickets planio? [Y, n] \e[39m"
 read -rsn1 response
 
-if [ "$#" -eq 0 ]; then
-    branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
-    ticketNumber=${branch:7};
+branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
+ticketNumber=${branch:7};
 
-    if [ -z "$ticketNumber" ]; then
-        echo "\e[31mNo ticket number present, aborting!\e[39m";
-        exit 1
-    fi
+if [ -z "$ticketNumber" ]; then
+    echo "\e[31mNo ticket number present, aborting!\e[39m";
+    exit 1
+fi
 
-    git checkout dev && git fetch && git pull && git merge $branch --no-ff --no-edit && git push;
-	if [ "$response" == "y" ]; then
-		planio "$var"
-    fi
-else
-	for var in "$@"
-	do
-	    git checkout dev && git fetch && git pull && git merge origin/ticket/$var --no-ff --no-edit && git push;
-		if [ "$response" == "y" ]; then
-			planio "$var"
-		fi
-	done
+git checkout sprint/$1 && git fetch && git pull && git merge $branch --no-ff --no-edit && git push;
+if [ "$response" == "y" ]; then
+	planio "$var"
 fi
 
 echo -e "\e[33m***** Cleanup merged tickets now? [Y, n] \e[39m"
 read -rsn1 cleanup
 if [[ $cleanup == "y" ]]; then
 	git cleanup
+fi
+
+echo -e "\e[33m***** Merge to slave now? [Y, n] \e[39m"
+read -rsn1 slave
+if [[ $slave == "y" ]]; then
+	git devtoslave
 fi
