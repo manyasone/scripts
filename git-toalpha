@@ -4,6 +4,8 @@
 # If ticket number is parsed as param, try to merge ticket/$1 to alpha
 # If no param is passed, try to merge current branch.
 
+ff='--no-ff'
+
 for var in "$@"
 do
 	shift
@@ -25,11 +27,11 @@ if [ "$#" -eq 0 ]; then
     if [ -z "$ticketNumber" ]; then
         echo "No ticket number present, aborting!";
     else
-        git checkout alpha && git fetch && git pull && git merge $branch $ff $edit;
+        git checkout alpha && git fetch && git pull && git merge $branch $ff $edit && git push;
     fi
 else
 	for var in "$@"
 	do
-	    git checkout alpha && git fetch && git pull && git merge origin/ticket/$var $ff $edit;
+	    git checkout alpha && git fetch && git pull && git merge origin/ticket/$var $ff $edit && git push;
 	done
 fi

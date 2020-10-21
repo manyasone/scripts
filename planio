@@ -28,6 +28,14 @@ else
 	projectName=$1
 	if [[ $projectName == 'mta' ]] ; then
 		projectName='mehr-tanken';
+	elif [[ $projectName == 'mtw' ]] ; then
+		projectName='mehr-tanken';
+	elif [[ $projectName == 'mt' ]] ; then
+		projectName='mehr-tanken';
+	elif [[ $projectName == 'clarus' ]] ; then
+		projectName='clarus-films';
+	elif [[ $projectName == 'perma' ]] ; then
+		projectName='perma-trade-2019';
 	fi
 	url=https://webfactor.plan.io/projects/$projectName/issues?query_id=125
 fi

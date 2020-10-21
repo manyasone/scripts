@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+v#!/usr/bin/env bash
 
 # Build a new fidion apk
 # Params:
